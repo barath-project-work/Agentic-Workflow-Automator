@@ -1,0 +1,108 @@
+# ──────────────────────────────────────────────
+# 🔐 Environment & Secrets
+# ──────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.env
+.env.production
+.env.development
+.env.staging
+
+# ──────────────────────────────────────────────
+# ☕ Java / Spring Boot
+# ──────────────────────────────────────────────
+target/
+!.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+*.war
+*.ear
+*.log
+hs_err_pid*
+replay_pid*
+
+# Maven
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.versionsBackup
+**/pom.xml.next
+release.properties
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# ──────────────────────────────────────────────
+# 🐍 Python
+# ──────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+poetry.lock
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ──────────────────────────────────────────────
+# ⚛️ Node.js / React / TypeScript
+# ──────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+frontend/build/
+frontend/dist/
+*.tsbuildinfo
+.next/
+.cache/
+.eslintcache
+
+# ──────────────────────────────────────────────
+# 🐳 Docker
+# ──────────────────────────────────────────────
+.docker/
+docker-compose.override.yml
+
+# ──────────────────────────────────────────────
+# 🛠️ IDE & Editor
+# ──────────────────────────────────────────────
+.idea/
+*.iml
+*.iws
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ──────────────────────────────────────────────
+# 📦 Build & Dependency Artifacts
+# ──────────────────────────────────────────────
+*.log
+logs/
+*.tmp
+*.bak
+*.orig
+
+# ──────────────────────────────────────────────
+# 📄 Project Specific
+# ──────────────────────────────────────────────
+# Keep architecture docs but ignore any generated output
+out/
+generated/
+
+# Kubernetes local config
+kubeconfig
+*.kubeconfig
+
+# Helm values override (local secrets)
+**/values.local.yaml
