@@ -1,8 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { AutoAwesome as AIcon } from '@mui/icons-material';
+import { Person as PersonIcon } from '@mui/icons-material';
 
 export function PublicLayout() {
+  const navigate = useNavigate();
+
   return (
     <Box
       sx={{
@@ -11,7 +13,7 @@ export function PublicLayout() {
         bgcolor: 'background.default',
       }}
     >
-      {/* Brand Panel - left side */}
+      {/* Founder Brand Panel - left side (Zomato-style hero) */}
       <Box
         sx={{
           display: { xs: 'none', md: 'flex' },
@@ -40,10 +42,10 @@ export function PublicLayout() {
         <Box
           sx={{
             position: 'absolute',
-            top: '10%',
-            right: '10%',
-            width: 200,
-            height: 200,
+            top: '8%',
+            right: '12%',
+            width: 220,
+            height: 220,
             borderRadius: '50%',
             background: 'rgba(255,255,255,0.04)',
             pointerEvents: 'none',
@@ -52,122 +54,142 @@ export function PublicLayout() {
         <Box
           sx={{
             position: 'absolute',
-            bottom: '15%',
+            bottom: '12%',
             left: '8%',
-            width: 150,
-            height: 150,
+            width: 160,
+            height: 160,
             borderRadius: '50%',
             background: 'rgba(255,255,255,0.03)',
             pointerEvents: 'none',
           }}
         />
 
-        {/* Logo */}
+        {/* AtlasAI Logo */}
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             gap: 2,
-            mb: 4,
+            mb: 3,
             position: 'relative',
             zIndex: 1,
           }}
         >
           <Box
+            component="img"
+            src="/founder/logo-atlasAI.png"
+            alt="AtlasAI"
             sx={{
-              width: 56,
-              height: 56,
-              borderRadius: '16px',
-              background: 'rgba(255,255,255,0.2)',
+              width: 48,
+              height: 48,
+              objectFit: 'contain',
+              borderRadius: '12px',
+              background: 'rgba(255,255,255,0.15)',
               backdropFilter: 'blur(8px)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              border: '1px solid rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.12)',
+              p: 0.5,
             }}
-          >
-            <AIcon sx={{ fontSize: 32, color: '#FFFFFF' }} />
-          </Box>
+          />
           <Typography
             variant="h3"
             sx={{
               color: '#FFFFFF',
               fontWeight: 800,
               letterSpacing: '-0.03em',
-              fontSize: '2.2rem',
+              fontSize: '2rem',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             AtlasAI
           </Typography>
         </Box>
 
-        {/* Tagline */}
-        <Typography
-          variant="h2"
-          sx={{
-            color: '#FFFFFF',
-            fontWeight: 700,
-            fontSize: { xs: '1.8rem', lg: '2.4rem' },
-            lineHeight: 1.3,
-            textAlign: 'center',
-            maxWidth: 420,
-            position: 'relative',
-            zIndex: 1,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          Agentic Sales
-          <br />
-          Workflow Automation
-        </Typography>
-
-        <Typography
-          sx={{
-            color: 'rgba(255,255,255,0.7)',
-            fontSize: '1rem',
-            mt: 2,
-            textAlign: 'center',
-            maxWidth: 360,
-            lineHeight: 1.6,
-            fontFamily: 'Inter, sans-serif',
-            position: 'relative',
-            zIndex: 1,
-          }}
-        >
-          AI-powered platform that orchestrates your entire sales workflow — from lead generation to deal closure.
-        </Typography>
-
-        {/* Feature badges */}
+        {/* Thumbnail Image — big hero visual, also clickable */}
         <Box
+          onClick={() => navigate('/founder')}
           sx={{
-            display: 'flex',
-            gap: 2,
-            mt: 5,
             position: 'relative',
             zIndex: 1,
-            flexWrap: 'wrap',
-            justifyContent: 'center',
+            width: '80%',
+            maxWidth: 480,
+            borderRadius: 3,
+            overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1)',
+            mb: 4,
+            transition: 'transform 0.3s ease',
+            cursor: 'pointer',
+            '&:hover': {
+              transform: 'scale(1.02)',
+            },
           }}
         >
-          {['AI-Driven', 'Automated', 'Integrated'].map((feature) => (
-            <Box
-              key={feature}
-              sx={{
-                px: 2.5,
-                py: 1,
-                borderRadius: 20,
-                background: 'rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(4px)',
-                border: '1px solid rgba(255,255,255,0.12)',
-                color: '#FFFFFF',
-                fontSize: '0.8125rem',
-                fontWeight: 500,
-                fontFamily: 'Inter, sans-serif',
-              }}
-            >
-              {feature}
-            </Box>
-          ))}
+          <Box
+            component="img"
+            src="/founder/thumbnail.png"
+            alt="AtlasAI Project Thumbnail"
+            sx={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+              bgcolor: '#A01522',
+            }}
+          />
+        </Box>
+
+        {/* Big Meet the Founder Icon - clickable */}
+        <Box
+          onClick={() => navigate('/founder')}
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 2,
+            cursor: 'pointer',
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'scale(1.08)',
+              '& .founder-icon-circle': {
+                bgcolor: 'rgba(255,255,255,0.25)',
+                boxShadow: '0 0 40px rgba(255,255,255,0.3)',
+              },
+            },
+          }}
+        >
+          {/* Large circular icon */}
+          <Box
+            className="founder-icon-circle"
+            sx={{
+              width: 96,
+              height: 96,
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.15)',
+              backdropFilter: 'blur(8px)',
+              border: '2px solid rgba(255,255,255,0.25)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 0 20px rgba(255,255,255,0.15)',
+            }}
+          >
+            <PersonIcon sx={{ fontSize: 44, color: '#FFFFFF' }} />
+          </Box>
+
+          {/* Text label */}
+          <Typography
+            sx={{
+              color: '#FFFFFF',
+              fontSize: '1.1rem',
+              fontWeight: 600,
+              fontFamily: 'Inter, sans-serif',
+              letterSpacing: '0.02em',
+              textAlign: 'center',
+            }}
+          >
+            Meet the Founder
+          </Typography>
         </Box>
       </Box>
 
@@ -195,24 +217,23 @@ export function PublicLayout() {
           }}
         >
           <Box
+            component="img"
+            src="/founder/logo-atlasAI.png"
+            alt="AtlasAI"
             sx={{
-              width: 36,
-              height: 36,
-              borderRadius: '10px',
-              background: 'linear-gradient(135deg, #E23744, #C41E2C)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              width: 32,
+              height: 32,
+              objectFit: 'contain',
+              borderRadius: '8px',
             }}
-          >
-            <AIcon sx={{ fontSize: 20, color: '#FFFFFF' }} />
-          </Box>
+          />
           <Typography
             sx={{
               fontWeight: 700,
               fontSize: '1.2rem',
               color: 'text.primary',
               letterSpacing: '-0.02em',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             AtlasAI

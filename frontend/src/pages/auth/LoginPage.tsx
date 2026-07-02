@@ -139,6 +139,7 @@ export function LoginPage() {
           </Typography>
         </Typography>
       </Box>
+
     </Box>
   );
 }

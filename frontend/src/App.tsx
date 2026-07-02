@@ -6,6 +6,7 @@ import { AppLayout } from './layouts/AppLayout';
 import { LoginPage } from './pages/auth/LoginPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { FounderPage } from './pages/auth/FounderPage';
 import { DashboardPage } from './pages/dashboard/DashboardPage';
 import { WorkflowListPage } from './pages/workflows/WorkflowListPage';
 import { WorkflowCreatePage } from './pages/workflows/WorkflowCreatePage';
@@ -123,6 +124,9 @@ function App() {
             <Route path="/offline" element={<OfflinePage />} />
             <Route path="/maintenance" element={<MaintenancePage />} />
           </Route>
+
+          {/* Standalone public routes */}
+          <Route path="/founder" element={<FounderPage />} />
 
           {/* Default redirect */}
           <Route path="/" element={<Navigate to="/login" replace />} />
