@@ -1,0 +1,116 @@
+version: "3.8"
+
+services:
+  # ──────────────────────────────────────────────
+  # PostgreSQL + pgvector
+  # ──────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: atlasai-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: atlasai
+      POSTGRES_PASSWORD: atlasai_secret
+      POSTGRES_DB: atlasai
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U atlasai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - atlasai-network
+
+  # ──────────────────────────────────────────────
+  # Redis
+  # ──────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: atlasai-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - atlasai-network
+
+  # ──────────────────────────────────────────────
+  # Zookeeper (Kafka dependency)
+  # ──────────────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: atlasai-zookeeper
+    restart: unless-stopped
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - atlasai-network
+
+  # ──────────────────────────────────────────────
+  # PgAdmin (PostgreSQL Management UI)
+  # ──────────────────────────────────────────────
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: atlasai-pgadmin
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@atlasai.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - atlasai-network
+
+  # ──────────────────────────────────────────────
+  # Kafka
+  # ──────────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: atlasai-kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+    networks:
+      - atlasai-network
+
+volumes:
+  postgres_data:
+  redis_data:
+  pgadmin_data:
+
+networks:
+  atlasai-network:
+    driver: bridge

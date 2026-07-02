@@ -1,0 +1,36 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: search-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/atlasai
+    username: atlasai
+    password: atlasai_secret
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    com.atlasai: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+app:
+  vector:
+    embedding-dimension: 1536
+    hnsw-m: 16
+    hnsw-ef-construction: 200

@@ -1,0 +1,106 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-auth-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/auth-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: ./mvnw clean verify -DskipTests
+
+  build-customer-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/customer-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: ./mvnw clean verify -DskipTests
+
+  build-workflow-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/workflow-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: ./mvnw clean verify -DskipTests
+
+  build-task-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/task-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: ./mvnw clean verify -DskipTests
+
+  build-notification-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/notification-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: ./mvnw clean verify -DskipTests
+
+  build-search-service:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: services/search-service
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+      - run: ./mvnw clean verify -DskipTests
+
+  build-frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build
