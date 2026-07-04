@@ -47,6 +47,7 @@ import { ForbiddenPage } from './pages/errors/ForbiddenPage';
 import { ServerErrorPage } from './pages/errors/ServerErrorPage';
 import { OfflinePage } from './pages/errors/OfflinePage';
 import { MaintenancePage } from './pages/errors/MaintenancePage';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
@@ -57,12 +58,14 @@ function App() {
           {/* Public routes */}
           <Route element={<PublicLayout />}>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<LoginPage />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
             <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
           </Route>
 
-          {/* Authenticated routes */}
-          <Route element={<AppLayout />}>
+          {/* Authenticated routes — protected by auth */}
+          <Route element={<ProtectedRoute />}>
+            <Route element={<AppLayout />}>
             {/* Dashboard */}
             <Route path="/dashboard" element={<DashboardPage />} />
 
@@ -123,6 +126,7 @@ function App() {
             <Route path="/500" element={<ServerErrorPage />} />
             <Route path="/offline" element={<OfflinePage />} />
             <Route path="/maintenance" element={<MaintenancePage />} />
+          </Route>
           </Route>
 
           {/* Standalone public routes */}

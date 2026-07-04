@@ -13,15 +13,16 @@ export interface User {
 
 interface AuthState {
   token: string | null;
+  refreshToken: string | null;
   user: User | null;
   isAuthenticated: boolean;
-  isDemo: boolean;
-  login: (token: string, user: User, isDemo?: boolean) => void;
+  login: (accessToken: string, refreshToken: string, user: User) => void;
   logout: () => void;
+  setTokens: (accessToken: string, refreshToken: string) => void;
 }
 
-function getStoredToken(): string | null {
-  return localStorage.getItem('atlasai_token');
+function getStored(key: string): string | null {
+  return localStorage.getItem(key);
 }
 
 function getStoredUser(): User | null {
@@ -36,24 +37,28 @@ function getStoredUser(): User | null {
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: getStoredToken(),
+  token: getStored('atlasai_token'),
+  refreshToken: getStored('atlasai_refresh_token'),
   user: getStoredUser(),
-  isAuthenticated: getStoredToken() !== null && getStoredUser() !== null,
-  isDemo: localStorage.getItem('atlasai_demo') === 'true',
+  isAuthenticated: getStored('atlasai_token') !== null && getStoredUser() !== null,
 
-  login: (token: string, user: User, isDemo = false) => {
-    localStorage.setItem('atlasai_token', token);
+  login: (accessToken: string, refreshToken: string, user: User) => {
+    localStorage.setItem('atlasai_token', accessToken);
+    localStorage.setItem('atlasai_refresh_token', refreshToken);
     localStorage.setItem('atlasai_user', JSON.stringify(user));
-    if (isDemo) {
-      localStorage.setItem('atlasai_demo', 'true');
-    }
-    set({ token, user, isAuthenticated: true, isDemo });
+    set({ token: accessToken, refreshToken, user, isAuthenticated: true });
   },
 
   logout: () => {
     localStorage.removeItem('atlasai_token');
+    localStorage.removeItem('atlasai_refresh_token');
     localStorage.removeItem('atlasai_user');
-    localStorage.removeItem('atlasai_demo');
-    set({ token: null, user: null, isAuthenticated: false, isDemo: false });
+    set({ token: null, refreshToken: null, user: null, isAuthenticated: false });
+  },
+
+  setTokens: (accessToken: string, refreshToken: string) => {
+    localStorage.setItem('atlasai_token', accessToken);
+    localStorage.setItem('atlasai_refresh_token', refreshToken);
+    set({ token: accessToken, refreshToken });
   },
 }));

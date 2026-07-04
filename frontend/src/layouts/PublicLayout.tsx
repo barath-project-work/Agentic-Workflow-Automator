@@ -204,40 +204,96 @@ export function PublicLayout() {
           p: { xs: 2, sm: 4 },
           bgcolor: '#FFFFFF',
         }}
-      >
-        {/* Mobile logo */}
+      >            {/* Mobile logo + Founder section */}
         <Box
           sx={{
             display: { xs: 'flex', md: 'none' },
-            alignItems: 'center',
-            gap: 1.5,
-            position: 'absolute',
-            top: 24,
-            left: 24,
+            flexDirection: 'column',
+            width: '100%',
           }}
         >
+          {/* Top bar with logo */}
           <Box
-            component="img"
-            src="/founder/logo-atlasAI.png"
-            alt="AtlasAI"
             sx={{
-              width: 32,
-              height: 32,
-              objectFit: 'contain',
-              borderRadius: '8px',
-            }}
-          />
-          <Typography
-            sx={{
-              fontWeight: 700,
-              fontSize: '1.2rem',
-              color: 'text.primary',
-              letterSpacing: '-0.02em',
-              fontFamily: 'Poppins, sans-serif',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              px: 2,
+              py: 1.5,
             }}
           >
-            AtlasAI
-          </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+              <Box
+                component="img"
+                src="/founder/logo-atlasAI.png"
+                alt="AtlasAI"
+                sx={{
+                  width: 32,
+                  height: 32,
+                  objectFit: 'contain',
+                  borderRadius: '8px',
+                }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  fontSize: '1.2rem',
+                  color: 'text.primary',
+                  letterSpacing: '-0.02em',
+                  fontFamily: 'Poppins, sans-serif',
+                }}
+              >
+                AtlasAI
+              </Typography>
+            </Box>
+
+            {/* Meet the Founder — compact mobile pill */}
+            <Box
+              onClick={() => navigate('/founder')}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1,
+                px: 1.5,
+                py: 0.75,
+                borderRadius: 20,
+                bgcolor: '#FFF5F5',
+                border: '1px solid #E2374420',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  bgcolor: '#FFEAEA',
+                  borderColor: '#E2374440',
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  width: 24,
+                  height: 24,
+                  borderRadius: '50%',
+                  bgcolor: '#E23744',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                }}
+              >
+                <PersonIcon sx={{ fontSize: 14, color: '#FFFFFF' }} />
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                  color: '#E23744',
+                  fontFamily: 'Inter, sans-serif',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Founder
+              </Typography>
+            </Box>
+          </Box>
         </Box>
 
         <Outlet />

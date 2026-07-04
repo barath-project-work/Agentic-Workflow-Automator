@@ -1,19 +1,34 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import {
   Box,
   Typography,
   TextField,
   Button,
   Alert,
-  Divider,
-  Chip,
+  CircularProgress,
 } from '@mui/material';
-import { AutoAwesome as AIIcon } from '@mui/icons-material';
+import { Email as EmailIcon, Lock as LockIcon, Person as PersonIcon } from '@mui/icons-material';
 import { useAuthStore } from '../../stores/authStore';
-import { demoUser } from '../../services/mockData';
+import api from '../../services/api';
+
+interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
+  expiresIn: number;
+  userId: string;
+  name: string;
+  email: string;
+  role: 'ROLE_USER' | 'ROLE_MANAGER' | 'ROLE_ADMIN';
+}
 
 export function LoginPage() {
+  const location = useLocation();
+  const [mode, setMode] = useState<'login' | 'register'>(
+    location.pathname === '/register' ? 'register' : 'login'
+  );
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -24,29 +39,63 @@ export function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    if (!email || !password) {
-      setError('Email and password are required');
+
+    if (mode === 'register' && !name) {
+      setError('Name is required');
       return;
     }
+    if (!email) {
+      setError('Email is required');
+      return;
+    }
+    if (!password) {
+      setError('Password is required');
+      return;
+    }
+    if (mode === 'register' && password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
     setLoading(true);
-    // Simulate API delay
-    setTimeout(() => {
+
+    try {
+      let data: AuthResponse;
+
+      if (mode === 'register') {
+        const res = await api.post('/auth/register', { name, email, password });
+        data = res.data;
+      } else {
+        const res = await api.post('/auth/login', { email, password });
+        data = res.data;
+      }
+
       login(
-        'demo_jwt_token_for_frontend_dev',
-        { id: demoUser.id, email: demoUser.email, name: demoUser.name, role: demoUser.role, jobTitle: demoUser.jobTitle },
-        true
+        data.accessToken,
+        data.refreshToken,
+        {
+          id: data.userId,
+          email: data.email,
+          name: data.name,
+          role: data.role,
+        }
       );
+
       navigate('/dashboard');
-    }, 800);
+    } catch (err: any) {
+      const message =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        (mode === 'register' ? 'Registration failed. Try a different email.' : 'Invalid email or password.');
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDemoAccess = () => {
-    login(
-      'demo_jwt_token_for_frontend_dev',
-      { id: demoUser.id, email: demoUser.email, name: demoUser.name, role: demoUser.role, jobTitle: demoUser.jobTitle },
-      true
-    );
-    navigate('/dashboard');
+  const switchMode = () => {
+    setMode(mode === 'login' ? 'register' : 'login');
+    setError('');
   };
 
   return (
@@ -54,48 +103,40 @@ export function LoginPage() {
       {/* Header */}
       <Box sx={{ textAlign: 'center', mb: 4 }}>
         <Typography variant="h4" sx={{ fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', color: '#1C1C1C' }}>
-          Welcome back
+          {mode === 'login' ? 'Welcome back' : 'Create your account'}
         </Typography>
         <Typography sx={{ mt: 1, color: '#696969', fontSize: '0.9375rem', fontFamily: 'Inter, sans-serif' }}>
-          Sign in to your AtlasAI workspace
+          {mode === 'login'
+            ? 'Sign in to your AtlasAI workspace'
+            : 'Start your free AtlasAI workspace'}
         </Typography>
-      </Box>
-
-      {/* Demo Quick Access */}
-      <Button
-        fullWidth
-        variant="contained"
-        size="large"
-        onClick={handleDemoAccess}
-        sx={{
-          py: 1.5,
-          borderRadius: 2,
-          fontSize: '1rem',
-          fontWeight: 600,
-          mb: 3,
-          background: 'linear-gradient(135deg, #E23744, #FF6B76)',
-          '&:hover': {
-            background: 'linear-gradient(135deg, #C41E2C, #E23744)',
-            transform: 'translateY(-1px)',
-            boxShadow: '0 4px 12px rgba(226, 55, 68, 0.3)',
-          },
-        }}
-        startIcon={<AIIcon />}
-      >
-        🚀 Quick Demo Access
-      </Button>
-
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
-        <Divider sx={{ flex: 1 }} />
-        <Chip label="or sign in" size="small" sx={{ color: '#9C9C9C', fontWeight: 500, fontSize: '0.75rem' }} />
-        <Divider sx={{ flex: 1 }} />
       </Box>
 
       {/* Error */}
-      {error && <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>{error}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       {/* Form */}
       <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+        {mode === 'register' && (
+          <TextField
+            label="Full name"
+            placeholder="John Doe"
+            fullWidth
+            required
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={loading}
+            InputProps={{
+              startAdornment: <PersonIcon sx={{ fontSize: 20, color: '#9C9C9C', mr: 1 }} />,
+            }}
+            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
+          />
+        )}
+
         <TextField
           label="Email address"
           type="email"
@@ -105,41 +146,82 @@ export function LoginPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
+          InputProps={{
+            startAdornment: <EmailIcon sx={{ fontSize: 20, color: '#9C9C9C', mr: 1 }} />,
+          }}
           sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
         />
+
         <TextField
           label="Password"
           type="password"
-          placeholder="Enter your password"
+          placeholder={mode === 'register' ? 'Create a strong password (min 8 chars)' : 'Enter your password'}
           fullWidth
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={loading}
+          InputProps={{
+            startAdornment: <LockIcon sx={{ fontSize: 20, color: '#9C9C9C', mr: 1 }} />,
+          }}
           sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
         />
-        <Box sx={{ textAlign: 'right', mt: -1 }}>
-          <Typography
-            sx={{ fontSize: '0.8125rem', color: '#E23744', fontWeight: 500, cursor: 'pointer', '&:hover': { textDecoration: 'underline' }, fontFamily: 'Inter, sans-serif' }}
-            onClick={() => navigate('/forgot-password')}
-          >
-            Forgot password?
-          </Typography>
-        </Box>
-        <Button type="submit" variant="outlined" fullWidth size="large" disabled={loading} sx={{ py: 1.5, borderRadius: 2, fontSize: '1rem', fontWeight: 500 }}>
-          Sign In
+
+        {mode === 'login' && (
+          <Box sx={{ textAlign: 'right', mt: -1 }}>
+            <Typography
+              sx={{
+                fontSize: '0.8125rem',
+                color: '#E23744',
+                fontWeight: 500,
+                cursor: 'pointer',
+                '&:hover': { textDecoration: 'underline' },
+                fontFamily: 'Inter, sans-serif',
+              }}
+              onClick={() => navigate('/forgot-password')}
+            >
+              Forgot password?
+            </Typography>
+          </Box>
+        )}
+
+        <Button
+          type="submit"
+          variant="contained"
+          fullWidth
+          size="large"
+          disabled={loading}
+          sx={{ py: 1.5, borderRadius: 2, fontSize: '1rem', fontWeight: 600 }}
+        >
+          {loading ? (
+            <CircularProgress size={22} sx={{ color: '#FFF' }} />
+          ) : mode === 'login' ? (
+            'Sign In'
+          ) : (
+            'Create Account'
+          )}
         </Button>
       </Box>
 
+      {/* Mode switch */}
       <Box sx={{ textAlign: 'center', mt: 3 }}>
         <Typography sx={{ fontSize: '0.875rem', color: '#696969', fontFamily: 'Inter, sans-serif' }}>
-          New to AtlasAI?{' '}
-          <Typography component="span" sx={{ color: '#E23744', fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem', '&:hover': { textDecoration: 'underline' } }}>
-            Contact your admin
+          {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
+          <Typography
+            component="span"
+            sx={{
+              color: '#E23744',
+              fontWeight: 600,
+              cursor: 'pointer',
+              fontSize: '0.875rem',
+              '&:hover': { textDecoration: 'underline' },
+            }}
+            onClick={switchMode}
+          >
+            {mode === 'login' ? 'Create one' : 'Sign in'}
           </Typography>
         </Typography>
       </Box>
-
     </Box>
   );
 }

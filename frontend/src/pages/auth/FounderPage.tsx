@@ -4,7 +4,6 @@ import {
   Box,
   Typography,
   Button,
-  Divider,
 } from '@mui/material';
 import {
   LinkedIn,
@@ -52,32 +51,33 @@ function SocialLinkCard({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        gap: 2,
-        px: 3,
-        py: 2,
-        borderRadius: 2.5,
+        gap: 1.5,
+        px: 2.5,
+        py: 1.75,
+        borderRadius: 2,
         textDecoration: 'none',
-        bgcolor: `${color}08`,
-        border: `1px solid ${color}20`,
-        transition: 'all 0.25s ease',
+        bgcolor: '#FFFFFF',
+        border: '1px solid #EDEDF0',
+        transition: 'all 0.2s ease',
         cursor: 'pointer',
+        minHeight: 56,
         '&:hover': {
-          bgcolor: `${color}15`,
-          borderColor: `${color}40`,
-          transform: 'translateY(-2px)',
-          boxShadow: `0 6px 16px ${color}20`,
+          borderColor: `${color}30`,
+          bgcolor: `${color}04`,
+          transform: 'translateY(-1px)',
+          boxShadow: `0 4px 12px ${color}12, 0 1px 2px rgba(0,0,0,0.04)`,
         },
       }}
     >
       <Box
         sx={{
-          width: 44,
-          height: 44,
-          borderRadius: '12px',
+          width: 40,
+          height: 40,
+          borderRadius: '10px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          bgcolor: `${color}12`,
+          bgcolor: `${color}10`,
           color,
           flexShrink: 0,
         }}
@@ -86,23 +86,25 @@ function SocialLinkCard({
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography
+          noWrap
           sx={{
-            fontSize: '0.9375rem',
+            fontSize: '0.8125rem',
             fontWeight: 600,
             color: '#1C1C1C',
             fontFamily: 'Inter, sans-serif',
+            letterSpacing: '-0.01em',
           }}
         >
           {label}
         </Typography>
       </Box>
-      <ExternalIcon sx={{ fontSize: 18, color: '#9C9C9C', flexShrink: 0 }} />
+      <ExternalIcon sx={{ fontSize: 15, color: '#C0C0C0', flexShrink: 0, opacity: 0.7 }} />
     </Box>
   );
 }
 
-// ─── Contact Info Row ─────────────────────────
-function ContactInfoRow({
+// ─── Contact Info Card ────────────────────────
+function ContactInfoCard({
   icon,
   label,
   value,
@@ -118,49 +120,59 @@ function ContactInfoRow({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        gap: 2,
-        px: 3,
-        py: 2,
-        borderRadius: 2.5,
-        bgcolor: `${color}08`,
-        border: `1px solid ${color}20`,
+        gap: 1.5,
+        px: 2.5,
+        py: 1.75,
+        borderRadius: 2,
+        bgcolor: '#FFFFFF',
+        border: '1px solid #EDEDF0',
+        transition: 'all 0.2s ease',
+        minHeight: 56,
+        '&:hover': {
+          borderColor: `${color}30`,
+          bgcolor: `${color}04`,
+          transform: 'translateY(-1px)',
+          boxShadow: `0 4px 12px ${color}12, 0 1px 2px rgba(0,0,0,0.04)`,
+        },
       }}
     >
       <Box
         sx={{
-          width: 44,
-          height: 44,
-          borderRadius: '12px',
+          width: 40,
+          height: 40,
+          borderRadius: '10px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          bgcolor: `${color}12`,
+          bgcolor: `${color}10`,
           color,
           flexShrink: 0,
         }}
       >
         {icon}
       </Box>
-      <Box>
+      <Box sx={{ minWidth: 0 }}>
         <Typography
           sx={{
-            fontSize: '0.75rem',
+            fontSize: '0.6875rem',
             fontWeight: 500,
-            color: '#9C9C9C',
+            color: '#A0A0A0',
             fontFamily: 'Inter, sans-serif',
             textTransform: 'uppercase',
-            letterSpacing: '0.06em',
+            letterSpacing: '0.08em',
+            mb: 0.25,
           }}
         >
           {label}
         </Typography>
         <Typography
+          noWrap
           sx={{
-            fontSize: '0.9375rem',
+            fontSize: '0.8125rem',
             fontWeight: 600,
             color: '#1C1C1C',
             fontFamily: 'Inter, sans-serif',
-            mt: 0.25,
+            letterSpacing: '-0.01em',
           }}
         >
           {value}
@@ -296,11 +308,11 @@ export function FounderPage() {
         </Box>
       </Box>
 
-      {/* Content section */}
+      {/* Content section — now a wide, dashboard-style layout */}
       <Box
         sx={{
           flex: 1,
-          maxWidth: 520,
+          maxWidth: { xs: 520, sm: 720, md: 1100 },
           mx: 'auto',
           width: '100%',
           px: { xs: 2, sm: 3 },
@@ -328,203 +340,222 @@ export function FounderPage() {
             }}
           />
 
-          <Box sx={{ p: { xs: 3, sm: 4 } }}>
-            {/* Social Links */}
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: '#9C9C9C',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                fontFamily: 'Inter, sans-serif',
-                mb: 2,
-              }}
-            >
-              Connect with me
-            </Typography>
-
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-              {/* LinkedIn */}
-              <SocialLinkCard
-                href={LINKEDIN_URL}
-                icon={<LinkedIn sx={{ fontSize: 24 }} />}
-                label="barath-tech-dev"
-                color="#0A66C2"
-              />
-
-              {/* GitHub */}
-              <SocialLinkCard
-                href={GITHUB_URL}
-                icon={<GitHub sx={{ fontSize: 24 }} />}
-                label="barath-project-work"
-                color="#1C1C1C"
-              />
-
-              {/* LeetCode */}
-              <SocialLinkCard
-                href={LEETCODE_URL}
-                icon={<LeetCodeSvgIcon size={24} />}
-                label="barath_code_dev"
-                color="#FFA116"
-              />
-            </Box>
-
-            {/* Contact Info */}
-            <Divider sx={{ my: 3 }} />
-
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: '#9C9C9C',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                fontFamily: 'Inter, sans-serif',
-                mb: 2,
-              }}
-            >
-              Contact
-            </Typography>
-
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-              <ContactInfoRow
-                icon={<PhoneIcon sx={{ fontSize: 22 }} />}
-                label="Phone"
-                value={PHONE}
-                color="#1BA672"
-              />
-              <ContactInfoRow
-                icon={<EmailIcon sx={{ fontSize: 22 }} />}
-                label="Email"
-                value={EMAIL}
-                color="#E23744"
-              />
-            </Box>
-
-            {/* Resume Download */}
-            <Divider sx={{ my: 3 }} />
-
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: '#9C9C9C',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                fontFamily: 'Inter, sans-serif',
-                mb: 2,
-              }}
-            >
-              Resume
-            </Typography>
-
+          <Box sx={{ p: { xs: 2.5, sm: 3, md: 4 } }}>
+            {/* ─── Responsive Grid: 3 cols (desktop) → 2 cols (tablet) → 1 col (mobile) ─── */}
             <Box
-              component="a"
-              href="/founder/Resume(CV).pdf"
-              target="_blank"
-              rel="noopener noreferrer"
               sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 2,
-                px: 3,
-                py: 2,
-                borderRadius: 2.5,
-                textDecoration: 'none',
-                bgcolor: '#FFF5F5',
-                border: '1px solid #E2374420',
-                transition: 'all 0.25s ease',
-                cursor: 'pointer',
-                '&:hover': {
-                  bgcolor: '#FFEAEA',
-                  borderColor: '#E2374440',
-                  transform: 'translateY(-2px)',
-                  boxShadow: '0 6px 16px rgba(226,55,68,0.15)',
-                },
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', md: '3fr 3fr 4fr' },
+                gap: { xs: 2.5, sm: 3, md: 3.5 },
+                alignItems: 'start',
               }}
             >
+              {/* ═══ Column 1: Social Links ═══ */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: '0.6875rem',
+                    fontWeight: 600,
+                    color: '#A0A0A0',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    fontFamily: 'Inter, sans-serif',
+                    mb: 1.5,
+                  }}
+                >
+                  Connect with me
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <SocialLinkCard
+                    href={LINKEDIN_URL}
+                    icon={<LinkedIn sx={{ fontSize: 22 }} />}
+                    label="barath-tech-dev"
+                    color="#0A66C2"
+                  />
+                  <SocialLinkCard
+                    href={GITHUB_URL}
+                    icon={<GitHub sx={{ fontSize: 22 }} />}
+                    label="barath-project-work"
+                    color="#1C1C1C"
+                  />
+                  <SocialLinkCard
+                    href={LEETCODE_URL}
+                    icon={<LeetCodeSvgIcon size={22} />}
+                    label="barath_code_dev"
+                    color="#FFA116"
+                  />
+                </Box>
+              </Box>
+
+              {/* ═══ Column 2: Contact Info ═══ */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: '0.6875rem',
+                    fontWeight: 600,
+                    color: '#A0A0A0',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.08em',
+                    fontFamily: 'Inter, sans-serif',
+                    mb: 1.5,
+                  }}
+                >
+                  Contact
+                </Typography>
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <ContactInfoCard
+                    icon={<PhoneIcon sx={{ fontSize: 20 }} />}
+                    label="Phone"
+                    value={PHONE}
+                    color="#1BA672"
+                  />
+                  <ContactInfoCard
+                    icon={<EmailIcon sx={{ fontSize: 20 }} />}
+                    label="Email"
+                    value={EMAIL}
+                    color="#E23744"
+                  />
+                </Box>
+              </Box>
+
+              {/* ═══ Column 3: Resume + Business Card ═══ */}
               <Box
                 sx={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: '12px',
+                  gridColumn: { xs: '1', sm: '1 / -1', md: 'auto' },
                   display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  bgcolor: '#FFEAEA',
-                  color: '#E23744',
-                  flexShrink: 0,
+                  flexDirection: { xs: 'column', sm: 'row', md: 'column' },
+                  gap: { xs: 1.5, sm: 1.5, md: 1.5 },
                 }}
               >
-                <DownloadIcon sx={{ fontSize: 22 }} />
+                {/* Resume CTA */}
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '0.6875rem',
+                      fontWeight: 600,
+                      color: '#A0A0A0',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      fontFamily: 'Inter, sans-serif',
+                      mb: 1.5,
+                    }}
+                  >
+                    Resume
+                  </Typography>
+
+                  <Box
+                    component="a"
+                    href="/founder/Resume(CV).pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1.5,
+                      px: 2.5,
+                      py: 2,
+                      borderRadius: 2,
+                      textDecoration: 'none',
+                      background: 'linear-gradient(135deg, #FFF5F5 0%, #FFFFFF 100%)',
+                      border: '1px solid #E2374420',
+                      transition: 'all 0.25s ease',
+                      cursor: 'pointer',
+                      '&:hover': {
+                        borderColor: '#E2374450',
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 8px 24px rgba(226,55,68,0.15), 0 1px 2px rgba(0,0,0,0.04)',
+                      },
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: 40,
+                        height: 40,
+                        borderRadius: '10px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        bgcolor: '#E23744',
+                        color: '#FFFFFF',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <DownloadIcon sx={{ fontSize: 20 }} />
+                    </Box>
+                    <Box sx={{ flex: 1, minWidth: 0 }}>
+                      <Typography
+                        noWrap
+                        sx={{
+                          fontSize: '0.875rem',
+                          fontWeight: 700,
+                          color: '#E23744',
+                          fontFamily: 'Inter, sans-serif',
+                          letterSpacing: '-0.01em',
+                        }}
+                      >
+                        Download Resume
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: '0.75rem',
+                          color: '#A0A0A0',
+                          fontFamily: 'Inter, sans-serif',
+                          mt: 0.25,
+                        }}
+                      >
+                        PDF &middot; Opens in new tab
+                      </Typography>
+                    </Box>
+                    <ExternalIcon sx={{ fontSize: 16, color: '#E2374480', flexShrink: 0 }} />
+                  </Box>
+                </Box>
+
+                {/* Business Card */}
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    sx={{
+                      fontSize: '0.6875rem',
+                      fontWeight: 600,
+                      color: '#A0A0A0',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      fontFamily: 'Inter, sans-serif',
+                      mb: 1.5,
+                    }}
+                  >
+                    Business Card
+                  </Typography>
+
+                  <Box
+                    sx={{
+                      borderRadius: 2,
+                      overflow: 'hidden',
+                      border: '1px solid #EDEDF0',
+                      bgcolor: '#FAFAFA',
+                      transition: 'all 0.2s ease',
+                      '&:hover': {
+                        borderColor: '#E2374420',
+                        boxShadow: '0 8px 24px rgba(0,0,0,0.06)',
+                        transform: 'translateY(-1px)',
+                      },
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src="/founder/business-card.png"
+                      alt="AtlasAI Business Card"
+                      sx={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'block',
+                        bgcolor: '#F0F0F0',
+                      }}
+                    />
+                  </Box>
+                </Box>
               </Box>
-              <Box sx={{ flex: 1 }}>
-                <Typography
-                  sx={{
-                    fontSize: '0.9375rem',
-                    fontWeight: 600,
-                    color: '#1C1C1C',
-                    fontFamily: 'Inter, sans-serif',
-                  }}
-                >
-                  Download Resume
-                </Typography>
-                <Typography
-                  sx={{
-                    fontSize: '0.75rem',
-                    color: '#9C9C9C',
-                    fontFamily: 'Inter, sans-serif',
-                    mt: 0.25,
-                  }}
-                >
-                  PDF &middot; Opens in new tab
-                </Typography>
-              </Box>
-              <ExternalIcon sx={{ fontSize: 18, color: '#9C9C9C', flexShrink: 0 }} />
-            </Box>
-
-            <Divider sx={{ my: 3 }} />
-
-            <Typography
-              sx={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                color: '#9C9C9C',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                fontFamily: 'Inter, sans-serif',
-                mb: 2,
-              }}
-            >
-              Business Card
-            </Typography>
-
-            <Box
-              sx={{
-                borderRadius: 2.5,
-                overflow: 'hidden',
-                border: '1px solid #E8E8E8',
-                bgcolor: '#FAFAFA',
-                transition: 'all 0.25s ease',
-                '&:hover': {
-                  borderColor: '#E23744',
-                  boxShadow: '0 6px 20px rgba(226,55,68,0.12)',
-                  transform: 'translateY(-2px)',
-                },
-              }}
-            >
-              <Box
-                component="img"
-                src="/founder/business-card.png"
-                alt="AtlasAI Business Card"
-                sx={{
-                  width: '100%',
-                  height: 'auto',
-                  display: 'block',
-                  bgcolor: '#F0F0F0',
-                }}
-              />
             </Box>
           </Box>
         </Box>
