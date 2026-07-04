@@ -13,6 +13,7 @@ RUN npm ci --frozen-lockfile || npm install
 
 # Copy the rest of the source code
 COPY tsconfig.json tsconfig.node.json vite.config.ts ./
+COPY index.html ./
 COPY public/ public/
 COPY src/ src/
 
