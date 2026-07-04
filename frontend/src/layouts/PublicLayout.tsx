@@ -198,10 +198,11 @@ export function PublicLayout() {
         sx={{
           flex: 1,
           display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: '100vh',
-          p: { xs: 2, sm: 4 },
+          p: { xs: 0, sm: 4 },
           bgcolor: '#FFFFFF',
         }}
       >            {/* Mobile logo + Founder section */}
@@ -210,6 +211,7 @@ export function PublicLayout() {
             display: { xs: 'flex', md: 'none' },
             flexDirection: 'column',
             width: '100%',
+            flexShrink: 0,
           }}
         >
           {/* Top bar with logo */}
@@ -218,7 +220,7 @@ export function PublicLayout() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              px: 2,
+              px: 3,
               py: 1.5,
             }}
           >

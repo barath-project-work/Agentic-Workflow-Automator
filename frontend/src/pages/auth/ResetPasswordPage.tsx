@@ -25,40 +25,42 @@ export function ResetPasswordPage() {
 
   if (success) {
     return (
-      <Box sx={{ width: '100%', maxWidth: 420, mx: 'auto', textAlign: 'center' }}>
-        <Box sx={{ fontSize: 48, mb: 2 }}>✅</Box>
-        <Typography variant="h5" fontWeight={700} mb={1}>Password reset successful</Typography>
-        <Typography variant="body2" color="text.secondary" mb={3}>Your password has been updated.</Typography>
-        <Button variant="contained" onClick={() => navigate('/login')} sx={{ borderRadius: 2, py: 1.5 }}>Sign In</Button>
+      <Box sx={{ width: '100%', maxWidth: { xs: '100%', sm: 420 }, mx: 'auto', textAlign: 'center', px: { xs: 3, sm: 0 } }}>
+        <Box sx={{ fontSize: { xs: 40, sm: 48 }, mb: 2 }}>✅</Box>
+        <Typography variant="h5" fontWeight={700} mb={1} sx={{ fontSize: { xs: '1.2rem', sm: '1.5rem' } }}>Password reset successful</Typography>
+        <Typography variant="body2" color="text.secondary" mb={3} sx={{ fontSize: { xs: '0.875rem', sm: '0.875rem' } }}>Your password has been updated.</Typography>
+        <Button variant="contained" onClick={() => navigate('/login')} sx={{ borderRadius: 2, py: { xs: 1.6, sm: 1.5 }, minHeight: 48, fontSize: { xs: '0.9375rem', sm: '1rem' } }}>Sign In</Button>
       </Box>
     );
   }
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 420, mx: 'auto' }}>
-      <Box sx={{ textAlign: 'center', mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em' }}>Reset password</Typography>
-        <Typography sx={{ mt: 1, color: '#696969', fontSize: '0.9375rem', fontFamily: 'Inter, sans-serif' }}>
+    <Box sx={{ width: '100%', maxWidth: { xs: '100%', sm: 420 }, mx: 'auto', px: { xs: 3, sm: 0 } }}>
+      <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4 } }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '1.75rem' }, letterSpacing: '-0.02em' }}>Reset password</Typography>
+        <Typography sx={{ mt: 0.75, color: '#696969', fontSize: { xs: '0.875rem', sm: '0.9375rem' }, fontFamily: 'Inter, sans-serif' }}>
           Choose a new password for your account
         </Typography>
       </Box>
-      {error && <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>{error}</Alert>}
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+      {error && <Alert severity="error" sx={{ mb: 2, borderRadius: 2, fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>{error}</Alert>}
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, sm: 2.5 } }}>
         <TextField label="New password" type="password" placeholder="Create a strong password" fullWidth required
           value={newPassword} onChange={(e) => setNewPassword(e.target.value)} disabled={loading}
+          InputProps={{ sx: { borderRadius: 2, '& input': { py: { xs: 1.6, sm: 1.5 }, fontSize: { xs: '0.9375rem', sm: '1rem' } } } }}
         />
         {newPassword && (
           <Box sx={{ mt: -1.5 }}>
             <LinearProgress variant="determinate" value={strengthValue} sx={{ height: 4, borderRadius: 2, bgcolor: '#F0F0F0', '& .MuiLinearProgress-bar': { bgcolor: strengthColor } }} />
-            <Typography variant="caption" sx={{ color: strengthColor, mt: 0.5, display: 'block' }}>{strength}</Typography>
+            <Typography variant="caption" sx={{ color: strengthColor, mt: 0.5, display: 'block', fontSize: { xs: '0.75rem', sm: '0.75rem' } }}>{strength}</Typography>
           </Box>
         )}
         <TextField label="Confirm password" type="password" placeholder="Re-enter your password" fullWidth required
           value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} disabled={loading}
           error={confirmPassword.length > 0 && newPassword !== confirmPassword}
           helperText={confirmPassword.length > 0 && newPassword !== confirmPassword ? 'Passwords do not match' : ''}
+          InputProps={{ sx: { borderRadius: 2, '& input': { py: { xs: 1.6, sm: 1.5 }, fontSize: { xs: '0.9375rem', sm: '1rem' } } } }}
         />
-        <Button type="submit" variant="contained" fullWidth size="large" disabled={loading} sx={{ py: 1.5, borderRadius: 2, fontSize: '1rem' }}>
+        <Button type="submit" variant="contained" fullWidth size="large" disabled={loading} sx={{ py: { xs: 1.6, sm: 1.5 }, borderRadius: 2, fontSize: { xs: '0.9375rem', sm: '1rem' }, minHeight: 48 }}>
           {loading ? <CircularProgress size={22} sx={{ color: '#FFF' }} /> : 'Reset Password'}
         </Button>
       </Box>

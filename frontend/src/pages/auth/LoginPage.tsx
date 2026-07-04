@@ -99,13 +99,13 @@ export function LoginPage() {
   };
 
   return (
-    <Box sx={{ width: '100%', maxWidth: 420, mx: 'auto' }}>
+    <Box sx={{ width: '100%', maxWidth: { xs: '100%', sm: 420 }, mx: 'auto', px: { xs: 3, sm: 0 } }}>
       {/* Header */}
-      <Box sx={{ textAlign: 'center', mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: '1.75rem', letterSpacing: '-0.02em', color: '#1C1C1C' }}>
+      <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4 } }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, fontSize: { xs: '1.5rem', sm: '1.75rem' }, letterSpacing: '-0.02em', color: '#1C1C1C' }}>
           {mode === 'login' ? 'Welcome back' : 'Create your account'}
         </Typography>
-        <Typography sx={{ mt: 1, color: '#696969', fontSize: '0.9375rem', fontFamily: 'Inter, sans-serif' }}>
+        <Typography sx={{ mt: 0.75, color: '#696969', fontSize: { xs: '0.875rem', sm: '0.9375rem' }, fontFamily: 'Inter, sans-serif' }}>
           {mode === 'login'
             ? 'Sign in to your AtlasAI workspace'
             : 'Start your free AtlasAI workspace'}
@@ -114,13 +114,13 @@ export function LoginPage() {
 
       {/* Error */}
       {error && (
-        <Alert severity="error" sx={{ mb: 2.5, borderRadius: 2 }}>
+        <Alert severity="error" sx={{ mb: 2, borderRadius: 2, fontSize: { xs: '0.8125rem', sm: '0.875rem' } }}>
           {error}
         </Alert>
       )}
 
       {/* Form */}
-      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+      <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, sm: 2.5 } }}>
         {mode === 'register' && (
           <TextField
             label="Full name"
@@ -131,9 +131,9 @@ export function LoginPage() {
             onChange={(e) => setName(e.target.value)}
             disabled={loading}
             InputProps={{
-              startAdornment: <PersonIcon sx={{ fontSize: 20, color: '#9C9C9C', mr: 1 }} />,
+              startAdornment: <PersonIcon sx={{ fontSize: { xs: 18, sm: 20 }, color: '#9C9C9C', mr: 1 }} />,
+              sx: { borderRadius: 2, '& input': { py: { xs: 1.6, sm: 1.5 }, fontSize: { xs: '0.9375rem', sm: '1rem' } } },
             }}
-            sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
           />
         )}
 
@@ -147,9 +147,9 @@ export function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           disabled={loading}
           InputProps={{
-            startAdornment: <EmailIcon sx={{ fontSize: 20, color: '#9C9C9C', mr: 1 }} />,
+            startAdornment: <EmailIcon sx={{ fontSize: { xs: 18, sm: 20 }, color: '#9C9C9C', mr: 1 }} />,
+            sx: { borderRadius: 2, '& input': { py: { xs: 1.6, sm: 1.5 }, fontSize: { xs: '0.9375rem', sm: '1rem' } } },
           }}
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
         />
 
         <TextField
@@ -162,16 +162,16 @@ export function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           disabled={loading}
           InputProps={{
-            startAdornment: <LockIcon sx={{ fontSize: 20, color: '#9C9C9C', mr: 1 }} />,
+            startAdornment: <LockIcon sx={{ fontSize: { xs: 18, sm: 20 }, color: '#9C9C9C', mr: 1 }} />,
+            sx: { borderRadius: 2, '& input': { py: { xs: 1.6, sm: 1.5 }, fontSize: { xs: '0.9375rem', sm: '1rem' } } },
           }}
-          sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
         />
 
         {mode === 'login' && (
-          <Box sx={{ textAlign: 'right', mt: -1 }}>
+          <Box sx={{ textAlign: 'right', mt: -0.5 }}>
             <Typography
               sx={{
-                fontSize: '0.8125rem',
+                fontSize: { xs: '0.8125rem', sm: '0.8125rem' },
                 color: '#E23744',
                 fontWeight: 500,
                 cursor: 'pointer',
@@ -191,7 +191,7 @@ export function LoginPage() {
           fullWidth
           size="large"
           disabled={loading}
-          sx={{ py: 1.5, borderRadius: 2, fontSize: '1rem', fontWeight: 600 }}
+          sx={{ py: { xs: 1.6, sm: 1.5 }, borderRadius: 2, fontSize: { xs: '0.9375rem', sm: '1rem' }, fontWeight: 600, minHeight: 48 }}
         >
           {loading ? (
             <CircularProgress size={22} sx={{ color: '#FFF' }} />
@@ -204,8 +204,8 @@ export function LoginPage() {
       </Box>
 
       {/* Mode switch */}
-      <Box sx={{ textAlign: 'center', mt: 3 }}>
-        <Typography sx={{ fontSize: '0.875rem', color: '#696969', fontFamily: 'Inter, sans-serif' }}>
+      <Box sx={{ textAlign: 'center', mt: { xs: 2.5, sm: 3 } }}>
+        <Typography sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' }, color: '#696969', fontFamily: 'Inter, sans-serif' }}>
           {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
           <Typography
             component="span"
@@ -213,7 +213,7 @@ export function LoginPage() {
               color: '#E23744',
               fontWeight: 600,
               cursor: 'pointer',
-              fontSize: '0.875rem',
+              fontSize: { xs: '0.8125rem', sm: '0.875rem' },
               '&:hover': { textDecoration: 'underline' },
             }}
             onClick={switchMode}
