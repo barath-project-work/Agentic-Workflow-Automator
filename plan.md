@@ -11,15 +11,15 @@
 |-------|-----------|--------|
 | **Frontend Pages** | ~95% | ✅ All 43 pages built — auth wired to real backend |
 | **Auth Service** | 100% | ✅ Running on port 8081 — register, login, refresh, RBAC verified |
+| **Customer/CRM Service** | 100% | ✅ Full CRUD microservice — Customer + Opportunity endpoints |
+| **Frontend→Backend Integration** | 40% | 🟡 Customers & Opportunities wired to real API with loading/error states |
 | **Founder Page Redesign** | 100% | ✅ Premium 3-column dashboard layout with responsive grid |
 | **Frontend Dockerfile + Nginx** | 100% | ✅ Multi-stage Docker build + production Nginx config |
 | **AI Agent Service** | 80% | ✅ Python structure done — needs OpenAI key |
-| **Customer/CRM Service** | 0% | ❌ Not started |
 | **Workflow Service** | 0% | ❌ Not started |
 | **Task Service** | 0% | ❌ Not started |
 | **Notification Service** | 0% | ❌ Not started |
 | **Search Service** | 0% | ❌ Not started |
-| **Frontend→Backend Integration** | 20% | 🟡 Auth wired (login, register, refresh, route protection) |
 
 ---
 
@@ -37,108 +37,102 @@
 - `GET /api/users` — list users (admin only)
 - BCrypt password hashing, role-based access (USER/MANAGER/ADMIN)
 - Global exception handler for consistent error responses
-- `shouldNotFilter` for public endpoints (register, login, refresh, actuator)
 
 **Frontend — Auth Integration**
-- `LoginPage.tsx` — real API calls, login + register mode toggle, reads `/register` route to auto-switch
-- `authStore.ts` — stores `accessToken` + `refreshToken` from backend, `setTokens()` for refresh
-- `api.ts` — full token refresh interceptor with request queuing (prevents infinite loops)
+- `LoginPage.tsx` — real API calls, login + register mode toggle
+- `authStore.ts` — stores `accessToken` + `refreshToken` from backend
+- `api.ts` — full token refresh interceptor with request queuing
 - `ProtectedRoute.tsx` — redirects to `/login` if unauthenticated
-- `App.tsx` — wraps authenticated routes in `<ProtectedRoute>`, adds `/register` route
-- `vite.config.ts` — proxies `/api` → `localhost:8081` (auth-service)
 - Mock demo auth completely removed
 
-**Infrastructure**
-- Docker Compose running: PostgreSQL 16, Redis 7, Kafka + Zookeeper, PgAdmin
-- Auth service verified: register → login → /me → refresh → logout all tested via curl
-- TypeScript compiles with zero errors
+---
 
-### 📝 Auth Flow
-1. Register → `POST /api/auth/register` (name, email, password)
-2. Login → `POST /api/auth/login` (email, password)
-3. Backend returns `{ accessToken, refreshToken, tokenType, expiresIn, userId, name, email, role }`
-4. Frontend stores tokens in `localStorage` (Zustand `authStore`)
-5. Every API request: `Authorization: Bearer <accessToken>`
-6. On 401: attempt refresh via `POST /api/auth/refresh`
-7. If refresh fails: logout + redirect to /login
+## 📦 Phase 2: Customer/CRM Service (Port 8082) ✅ Complete
+
+### Backend — Full Java/Spring Boot Microservice
+
+**Files created:**
+```
+services/customer-service/src/main/java/com/atlasai/customer/
+├── CustomerApplication.java                 — Entry point (@EnableCaching)
+├── config/
+│   ├── SecurityConfig.java                  — JWT auth for all /api/**
+│   ├── JwtAuthFilter.java                   — Extracts JWT claims from header
+│   └── GlobalExceptionHandler.java          — Consistent error responses
+├── controller/
+│   ├── CustomerController.java              — Full CRUD + search + count
+│   └── OpportunityController.java           — Full CRUD + by-customer + count
+├── service/
+│   ├── CustomerService.java                 — CRUD + search with filters
+│   └── OpportunityService.java              — CRUD + search with filters
+├── repository/
+│   ├── CustomerRepository.java              — JPA with search query (industry, location, status, days)
+│   └── OpportunityRepository.java           — JPA with search query (stage, value range)
+└── model/
+    ├── entity/
+    │   ├── Customer.java                    — JPA entity (12 fields + timestamps)
+    │   └── Opportunity.java                 — JPA entity (10 fields + timestamps)
+    ├── enums/
+    │   ├── CustomerStatus.java              — ACTIVE, INACTIVE, LEAD
+    │   └── OpportunityStage.java            — PROSPECT → WON/LOST pipeline
+    ├── request/
+    │   ├── CustomerRequest.java             — With @NotBlank/@Email validation
+    │   └── OpportunityRequest.java          — With validation
+    └── response/
+        ├── CustomerResponse.java            — @Builder pattern
+        └── OpportunityResponse.java         — @Builder pattern
+```
+
+**API Endpoints:**
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| `GET` | `/api/customers?search=&industry=&location=&status=&daysSinceContact=` | Search/filter customers |
+| `GET` | `/api/customers/{id}` | Get customer by ID |
+| `POST` | `/api/customers` | Create customer |
+| `PUT` | `/api/customers/{id}` | Update customer |
+| `DELETE` | `/api/customers/{id}` | Delete customer |
+| `GET` | `/api/customers/count` | Customer count (public) |
+| `GET` | `/api/opportunities?search=&stage=&minValue=&maxValue=` | Search/filter opportunities |
+| `GET` | `/api/opportunities/{id}` | Get opportunity by ID |
+| `GET` | `/api/opportunities/by-customer/{customerId}` | Get by customer |
+| `POST` | `/api/opportunities` | Create opportunity |
+| `PUT` | `/api/opportunities/{id}` | Update opportunity |
+| `DELETE` | `/api/opportunities/{id}` | Delete opportunity |
+| `GET` | `/api/opportunities/count` | Opportunity count (public) |
+
+**Dockerfile** — Multi-stage Maven build (same pattern as auth-service)
+
+### Frontend — Real API Connection
+
+**New files created:**
+- `frontend/src/services/customerService.ts` — API client with TypeScript interfaces
+- `frontend/src/services/opportunityService.ts` — API client for opportunities
+- `frontend/src/hooks/useCustomers.ts` — TanStack Query hooks (list, detail, create, update, delete)
+- `frontend/src/hooks/useOpportunities.ts` — TanStack Query hooks for opportunities
+- `frontend/src/hooks/useDashboard.ts` — Dashboard summary hooks
+
+**Pages updated (now use real API with loading/error/empty states):**
+- `CustomerListPage.tsx` — Loading spinner, error alert, empty state with CTA, search filter
+- `CustomerDetailPage.tsx` — Loading, error, 360° view with linked opportunities
+- `CustomerFormPage.tsx` — Create with validation, loading state, error handling
+- `OpportunityListPage.tsx` — Kanban + table view, loading/error/empty states
+- `OpportunityDetailPage.tsx` — Loading, error, deal info with probability bar
+- `OpportunityFormPage.tsx` — Create with validation, loading state
+- `DashboardPage.tsx` — Real customer/deal counts, recent customers & deals lists
 
 ---
 
 ## 🎨 Phase 1.5: Founder Page & UI Redesign ✅ Complete
 
 ### What Was Built
-
-**FounderPage.tsx — Premium Redesign**
-- Desktop-first 3-column CSS grid layout: `[Social Links | Contact Info | Actions]`
-- Tablet (sm): 2 columns with Resume + Business Card side-by-side below
-- Mobile (xs): 1 column — everything stacks
-- Content container widened from 520px → 1100px on desktop
-- All vertical dividers removed, sections separated by grid gap
-- `SocialLinkCard` and `ContactInfoCard` — identical dimensions (`minHeight: 56`, `px: 2.5, py: 1.75`, `borderRadius: 2`, 40px icon containers)
-- Text overflow handled with `noWrap` + `minWidth: 0` + `text-overflow: ellipsis`
-- Resume CTA uses `fontWeight: 700`, gradient background, solid red icon container
-- Subtle hover states: `translateY(-1px)`, layered shadows (Linear/Vercel/Stripe-inspired)
-- Section headings: `0.6875rem`, `#A0A0A0`, uppercase, `letterSpacing: 0.08em`
-
-**PublicLayout.tsx — Mobile Founder Access**
-- On mobile (xs): added top bar with AtlasAI logo + compact "Founder" pill button
-- Navigates to `/founder` — same as desktop "Meet the Founder" section
-
-### Validated
-- [x] TypeScript compiles with zero errors
-- [x] Production build succeeds (`npm run build`)
+- Desktop-first 3-column CSS grid layout
+- Tablet/mobile responsive variants
+- Mobile responsive fixes for all auth pages (login, forgot password, reset password)
 
 ---
 
-## 📦 Phase 1.6: Frontend Deployment Files ✅ Complete
-
-### What Was Built
-
-**frontend/Dockerfile** — Multi-stage production Docker build:
-- Stage 1 (`node:20-alpine`): installs deps, runs `npm run build`
-- Stage 2 (`nginx:stable-alpine`): serves built `dist/` via Nginx on port 80
-- HEALTHCHECK via `/health` endpoint
-
-**frontend/nginx.conf** — Production Nginx config:
-- SPA routing via `try_files $uri /index.html`
-- `/api/` proxy pass to auth-service backend (configurable upstream)
-- Gzip compression for JS, CSS, JSON, SVG, fonts
-- Security headers: X-Frame-Options, X-Content-Type, XSS-Protection, Referrer-Policy
-- Cache headers: assets (1 year immutable), static images (30 days), index.html (no-cache)
-
-### Build & Run
-```bash
-cd frontend
-docker build -t atlasai-frontend .
-docker run -p 8080:80 atlasai-frontend
-```
-
----
-
-## 🗺️ Phase 2: Customer/CRM Service (Port 8082)
-
-### To Build
-- [ ] JPA entities: `Customer`, `Opportunity`
-- [ ] Spring Data JPA repositories with search/filter methods
-- [ ] Service layer with CRUD + business logic
-- [ ] REST controllers matching frontend expectations
-- [ ] Kafka producer for `customer.updated` events
-- [ ] Redis cache integration
-- [ ] DTOs with validation + unit tests
-
-### Frontend Pages That Will Connect
-| Page | Route | Endpoints Needed |
-|------|-------|-----------------|
-| CustomerListPage | `/customers` | `GET /api/customers?search=&industry=&location=` |
-| CustomerDetailPage | `/customers/:id` | `GET /api/customers/{id}` |
-| CustomerFormPage | `/customers/create`, `/customers/:id/edit` | `POST /api/customers`, `PUT /api/customers/{id}` |
-| OpportunityListPage | `/opportunities` | `GET /api/opportunities` |
-| OpportunityDetailPage | `/opportunities/:id` | `GET /api/opportunities/{id}` |
-| OpportunityFormPage | `/opportunities/create`, `/opportunities/:id/edit` | `POST /api/opportunities`, `PUT /api/opportunities/{id}` |
-
----
-
-## 🔄 Phase 3: Workflow Service (Port 8083)
+## 🔄 Phase 3: Workflow Service (Port 8083) ❌ Not Started
 
 ### To Build
 - [ ] JPA entities: `WorkflowRun`, `WorkflowStep`
@@ -158,7 +152,7 @@ docker run -p 8080:80 atlasai-frontend
 
 ---
 
-## 📋 Phase 4: Task Service (Port 8084)
+## 📋 Phase 4: Task Service (Port 8084) ❌ Not Started
 
 ### To Build
 - [ ] JPA entities: `Task`
@@ -175,7 +169,7 @@ docker run -p 8080:80 atlasai-frontend
 
 ---
 
-## 📧 Phase 5: Notification Service (Port 8085)
+## 📧 Phase 5: Notification Service (Port 8085) ❌ Not Started
 
 ### To Build
 - [ ] Kafka consumer for email notification events
@@ -185,7 +179,7 @@ docker run -p 8080:80 atlasai-frontend
 
 ---
 
-## 🔎 Phase 6: Search Service (Port 8086)
+## 🔎 Phase 6: Search Service (Port 8086) ❌ Not Started
 
 ### To Build
 - [ ] pgvector vector store integration
@@ -197,13 +191,20 @@ docker run -p 8080:80 atlasai-frontend
 
 ## 🔗 Phase 7: Frontend → Backend Integration
 
-### To Build
-- [ ] Replace mock data with TanStack Query API calls for each domain (Customers, Opportunities, Workflows, Tasks, Analytics, Admin)
-- [ ] Add loading skeletons to all list pages
-- [ ] Add error states for failed API calls
+### Completed
 - [x] Token refresh interceptor in `api.ts` with request queuing
 - [x] Route protection via `ProtectedRoute.tsx`
-- [ ] Implement proper 404/error pages from mock data placeholders
+- [x] Customer pages wired to real API (list, detail, form)
+- [x] Opportunity pages wired to real API (list, detail, form)
+- [x] Dashboard wired to real customer/opportunity data
+
+### To Build
+- [ ] Workflow pages — connect to future Workflow Service
+- [ ] Task pages — connect to future Task Service
+- [ ] Analytics pages — connect to backend
+- [ ] Admin pages — connect to backend
+- [ ] Add loading skeletons to all list pages
+- [ ] Add error states for failed API calls
 
 ---
 
@@ -212,7 +213,8 @@ docker run -p 8080:80 atlasai-frontend
 ### Completed
 - [x] Frontend Dockerfile (multi-stage build with Nginx)
 - [x] Frontend nginx.conf (SPA routing + API proxy + caching + security)
-- [x] Auth service Dockerfile (exists and ready)
+- [x] Auth service Dockerfile (multi-stage Maven build)
+- [x] Customer service Dockerfile (multi-stage Maven build)
 
 ### To Build
 - [ ] Add all microservices to `docker-compose.yml`
@@ -228,12 +230,10 @@ docker run -p 8080:80 atlasai-frontend
 ## 🚀 Phase 9: Deployment & Launch
 
 ### To Do
-- [ ] Deploy PostgreSQL (managed: Neon, Supabase, or Railway)
-- [ ] Deploy auth service (Railway, Render, or Fly.io)
-- [ ] Deploy frontend (Vercel, Netlify, or Railway)
+- [ ] Deploy Customer/CRM service to Railway
+- [ ] Register Customer service domain + update Nginx proxy
 - [ ] Set up custom domain + SSL
-- [ ] Configure JWT secret in production
-- [ ] Run end-to-end auth flow test on production
+- [ ] Run end-to-end auth + customer CRUD flow test on production
 - [ ] Monitor logs and error rates
 
 ---
