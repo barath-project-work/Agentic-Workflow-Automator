@@ -23,19 +23,19 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
     List<Customer> findByLocationContainingIgnoreCase(String location);
 
     @Query(value = "SELECT c FROM Customer c WHERE " +
-           "(:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
-           "OR LOWER(c.company) LIKE LOWER(CONCAT('%', :search, '%')) " +
-           "OR LOWER(c.email) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-           "AND (:industry IS NULL OR LOWER(c.industry) LIKE LOWER(CONCAT('%', :industry, '%'))) " +
-           "AND (:location IS NULL OR LOWER(c.location) LIKE LOWER(CONCAT('%', :location, '%'))) " +
+           "(:search IS NULL OR c.name LIKE CONCAT('%', :search, '%') " +
+           "OR c.company LIKE CONCAT('%', :search, '%') " +
+           "OR c.email LIKE CONCAT('%', :search, '%')) " +
+           "AND (:industry IS NULL OR c.industry LIKE CONCAT('%', :industry, '%')) " +
+           "AND (:location IS NULL OR c.location LIKE CONCAT('%', :location, '%')) " +
            "AND (:status IS NULL OR c.status = :status) " +
            "AND (:lastContactedBefore IS NULL OR c.lastContacted < :lastContactedBefore)",
            countQuery = "SELECT COUNT(c) FROM Customer c WHERE " +
-           "(:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
-           "OR LOWER(c.company) LIKE LOWER(CONCAT('%', :search, '%')) " +
-           "OR LOWER(c.email) LIKE LOWER(CONCAT('%', :search, '%'))) " +
-           "AND (:industry IS NULL OR LOWER(c.industry) LIKE LOWER(CONCAT('%', :industry, '%'))) " +
-           "AND (:location IS NULL OR LOWER(c.location) LIKE LOWER(CONCAT('%', :location, '%'))) " +
+           "(:search IS NULL OR c.name LIKE CONCAT('%', :search, '%') " +
+           "OR c.company LIKE CONCAT('%', :search, '%') " +
+           "OR c.email LIKE CONCAT('%', :search, '%')) " +
+           "AND (:industry IS NULL OR c.industry LIKE CONCAT('%', :industry, '%')) " +
+           "AND (:location IS NULL OR c.location LIKE CONCAT('%', :location, '%')) " +
            "AND (:status IS NULL OR c.status = :status) " +
            "AND (:lastContactedBefore IS NULL OR c.lastContacted < :lastContactedBefore)")
     Page<Customer> searchCustomers(

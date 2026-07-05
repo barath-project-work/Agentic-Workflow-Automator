@@ -20,14 +20,14 @@ public interface OpportunityRepository extends JpaRepository<Opportunity, UUID> 
     List<Opportunity> findByStage(OpportunityStage stage);
 
     @Query(value = "SELECT o FROM Opportunity o WHERE " +
-           "(:search IS NULL OR LOWER(o.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
-           "OR LOWER(o.customerName) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+           "(:search IS NULL OR o.name LIKE CONCAT('%', :search, '%') " +
+           "OR o.customerName LIKE CONCAT('%', :search, '%')) " +
            "AND (:stage IS NULL OR o.stage = :stage) " +
            "AND (:minValue IS NULL OR o.value >= :minValue) " +
            "AND (:maxValue IS NULL OR o.value <= :maxValue)",
            countQuery = "SELECT COUNT(o) FROM Opportunity o WHERE " +
-           "(:search IS NULL OR LOWER(o.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
-           "OR LOWER(o.customerName) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+           "(:search IS NULL OR o.name LIKE CONCAT('%', :search, '%') " +
+           "OR o.customerName LIKE CONCAT('%', :search, '%')) " +
            "AND (:stage IS NULL OR o.stage = :stage) " +
            "AND (:minValue IS NULL OR o.value >= :minValue) " +
            "AND (:maxValue IS NULL OR o.value <= :maxValue)")
