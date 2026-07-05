@@ -22,21 +22,25 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String company;
 
+    @Column(columnDefinition = "VARCHAR(255)")
     private String industry;
 
+    @Column(columnDefinition = "VARCHAR(255)")
     private String location;
 
+    @Column(columnDefinition = "VARCHAR(255)")
     private String email;
 
+    @Column(columnDefinition = "VARCHAR(255)")
     private String phone;
 
-    @Column(name = "contact_person")
+    @Column(name = "contact_person", columnDefinition = "VARCHAR(255)")
     private String contactPerson;
 
     @Column(name = "last_contacted")
@@ -52,6 +56,7 @@ public class Customer {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
+    @Column(columnDefinition = "VARCHAR(255)")
     private String website;
 
     @Column(name = "created_at", nullable = false, updatable = false)

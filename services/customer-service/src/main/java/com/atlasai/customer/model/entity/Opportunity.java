@@ -24,13 +24,13 @@ public class Opportunity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     private String name;
 
     @Column(name = "customer_id", nullable = false)
     private UUID customerId;
 
-    @Column(name = "customer_name")
+    @Column(name = "customer_name", columnDefinition = "VARCHAR(255)")
     private String customerName;
 
     @Enumerated(EnumType.STRING)
@@ -47,7 +47,7 @@ public class Opportunity {
     @Column(name = "close_date")
     private LocalDate closeDate;
 
-    @Column(name = "assigned_to")
+    @Column(name = "assigned_to", columnDefinition = "VARCHAR(255)")
     private String assignedTo;
 
     @Column(columnDefinition = "TEXT")
