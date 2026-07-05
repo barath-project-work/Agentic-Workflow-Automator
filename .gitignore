@@ -106,3 +106,4 @@ kubeconfig
 
 # Helm values override (local secrets)
 **/values.local.yaml
+nul
