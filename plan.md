@@ -1,7 +1,7 @@
 # AtlasAI — Project Implementation Plan
 
 > **Project:** Agentic Sales Workflow Automation Platform
-> **Last Updated:** July 4, 2026
+> **Last Updated:** July 5, 2026
 
 ---
 
@@ -12,7 +12,7 @@
 | **Frontend Pages** | ~95% | ✅ All 43 pages built — auth + customers + opportunities wired to real backend |
 | **Auth Service** | 100% | ✅ Running on Railway — register, login, refresh, RBAC verified |
 | **Customer/CRM Service** | 100% | ✅ Running on Railway — full CRUD for customers & opportunities |
-| **Frontend→Backend Integration** | 40% | 🟡 Customers, Opportunities & Dashboard wired — need loading skeletons |
+| **Frontend→Backend Integration** | 70% | 🟡 All customer/opportunity pages wired — pagination handled |
 | **Frontend Nginx** | 100% | ✅ Routes /api/auth → auth-service, /api/customers & /api/opportunities → customer-service |
 | **Founder Page Redesign** | 100% | ✅ Premium 3-column dashboard layout with responsive grid |
 | **Mobile Responsive** | 30% | 🟡 Auth pages done — 40+ more pages need mobile fixes |
@@ -53,6 +53,12 @@
 - `api.ts` — full token refresh interceptor with request queuing
 - `ProtectedRoute.tsx` — redirects to `/login` if unauthenticated
 
+### 🔧 Auth Service Fixes (July 5)
+
+| Fix | Description |
+|-----|-------------|
+| `JwtAuthenticationFilter` | Previously blocked public endpoints on JWT error (called `response.sendError()` + `return` skipping `filterChain.doFilter()`). Fixed: log warning, clear context, **always continue filter chain** — public endpoints work even with bad tokens in headers. |
+
 ---
 
 ## 📦 Phase 2: Customer/CRM Service (Port 8082) ✅ Complete & Deployed
@@ -61,7 +67,7 @@
 
 ```
 services/customer-service/src/main/java/com/atlasai/customer/
-├── CustomerApplication.java                 — Entry point (no @EnableCaching)
+├── CustomerApplication.java                 — Entry point
 ├── config/
 │   ├── DataSourceConfig.java               — Reads Railway DATABASE_URL
 │   ├── SecurityConfig.java                  — JWT auth for all /api/**
@@ -83,17 +89,39 @@ services/customer-service/src/main/java/com/atlasai/customer/
     └── response/ (CustomerResponse.java, OpportunityResponse.java)
 ```
 
-**API Endpoints:**
+### 🔧 Customer Service Fixes (July 5)
+
+| Fix | Description |
+|-----|-------------|
+| `JwtAuthFilter` | Previously caught JWT exceptions **silently with zero logging** — impossible to debug 403s. Now logs `WARN` with method, URI, and error for every JWT failure. |
+| `SecurityConfig` | Added `@EnableMethodSecurity` for `@PreAuthorize` support. |
+| `GlobalExceptionHandler` | Rewritten with 8 dedicated handlers: `IllegalArgument` (400), `MethodArgumentNotValid` (400), `AccessDenied` (403), `JwtException` (401), `DataIntegrityViolation` (409), `HttpMessageNotReadable` (400), `MissingServletRequestParam` (400), `MethodArgumentTypeMismatch` (400). Full error logging. |
+| **Pagination** | `CustomerRepository`/`OpportunityRepository` — search queries return `Page<T>` with `countQuery`. `CustomerService`/`OpportunityService` — accept `Pageable`, return `Page<ResponseDTO>`. Controllers accept `?page=&size=&sort=&direction=`. |
+| **Logging config** | Added Jackson date serialization, structured logging pattern, health details. |
+| **Entity column definitions** | Added explicit `@Column(columnDefinition = "VARCHAR(255)")` to all String fields in `Customer.java` and `Opportunity.java` to prevent `bytea` column type issue. |
+| **Database schema fix** | Set `ddl-auto: create` to drop & recreate tables with correct `VARCHAR` types (⚠️ temporary — revert to `update` after first deploy). |
+
+### Major Bug Fixed: `lower(bytea)` PostgreSQL Error
+
+**Root cause:** The `customers` and `opportunities` tables were created with `bytea` (binary) columns instead of `varchar`/`text`. PostgreSQL's `LOWER()` function cannot be applied to binary data.
+
+**Error:** `ERROR: function lower(bytea) does not exist`
+
+**Fix:** Changed `ddl-auto: update` → `ddl-auto: create` to drop and recreate tables with correct types. Added explicit `columnDefinition = "VARCHAR(255)"` to entity fields as a safety measure.
+
+**Next step:** After Railway deploy succeeds, change `ddl-auto: create` back to `update` and push again.
+
+### API Endpoints
 
 | Method | Path | Purpose |
 |--------|------|---------|
-| `GET` | `/api/customers?search=&industry=&location=&status=&daysSinceContact=` | Search/filter customers |
+| `GET` | `/api/customers?search=&industry=&location=&status=&daysSinceContact=&page=&size=&sort=&direction=` | Search/filter customers (paginated) |
 | `GET` | `/api/customers/{id}` | Get customer by ID |
 | `POST` | `/api/customers` | Create customer |
 | `PUT` | `/api/customers/{id}` | Update customer |
 | `DELETE` | `/api/customers/{id}` | Delete customer |
 | `GET` | `/api/customers/count` | Customer count |
-| `GET` | `/api/opportunities?search=&stage=&minValue=&maxValue=` | Search/filter opportunities |
+| `GET` | `/api/opportunities?search=&stage=&minValue=&maxValue=&page=&size=&sort=&direction=` | Search/filter opportunities (paginated) |
 | `GET` | `/api/opportunities/{id}` | Get opportunity by ID |
 | `GET` | `/api/opportunities/by-customer/{customerId}` | Get by customer |
 | `POST` | `/api/opportunities` | Create opportunity |
@@ -103,12 +131,15 @@ services/customer-service/src/main/java/com/atlasai/customer/
 
 ### Frontend — Real API Connection
 
-**New files:**
-- `frontend/src/services/customerService.ts` — API client
-- `frontend/src/services/opportunityService.ts` — API client
-- `frontend/src/hooks/useCustomers.ts` — TanStack Query hooks
-- `frontend/src/hooks/useOpportunities.ts` — TanStack Query hooks
-- `frontend/src/hooks/useDashboard.ts` — Dashboard summary hooks
+**Services (paginated types):**
+- `frontend/src/services/customerService.ts` — `getAll()` returns `PaginatedCustomers` (content, totalElements, totalPages, number, size)
+- `frontend/src/services/opportunityService.ts` — `getAll()` returns `PaginatedOpportunities`
+
+**Hooks (paginated + non-paginated):**
+- `useCustomers()` — extracts `.content` from paginated responses (backward compatible)
+- `useCustomersPaginated()` — returns full pagination metadata
+- `useOpportunities()` — extracts `.content` from paginated responses
+- `useOpportunitiesPaginated()` — returns full pagination metadata
 
 **Pages updated (loading/error/empty states + real API):**
 - `CustomerListPage.tsx`, `CustomerDetailPage.tsx`, `CustomerFormPage.tsx`
@@ -197,6 +228,7 @@ The `nginx.conf` was updated to route different API paths to the correct backend
 - [x] Customer pages wired to real API (list, detail, form)
 - [x] Opportunity pages wired to real API (list, detail, form)
 - [x] Dashboard wired to real customer/opportunity data
+- [x] Pagination support in customer/opportunity services and hooks
 
 ### To Build
 - [ ] Workflow pages — connect to future Workflow Service
@@ -237,6 +269,11 @@ The `nginx.conf` was updated to route different API paths to the correct backend
 - [x] Nginx routes auth + customer/opportunity APIs to correct backends
 
 ### To Do
+- [x] Fixed JWT validation logging — now log every failure with exact error
+- [x] Fixed GlobalExceptionHandler — proper HTTP status codes + stack trace logging
+- [x] Fixed pagination — all list endpoints support page/size/sort/direction
+- [x] Fixed entity column definitions — prevent `bytea` column type
+- [ ] **REVERT `ddl-auto: create` back to `update`** after first Railway deploy
 - [ ] Run end-to-end auth + customer CRUD flow test on production
 - [ ] Add more services to Nginx as they're built (workflows, tasks, etc.)
 - [ ] Set up custom domain + SSL (if needed)
@@ -443,6 +480,32 @@ curl -X POST https://customer-domain.up.railway.app/api/customers \
 
 ---
 
+### 1️⃣1️⃣ `JWT_SECRET` Must Match Across All Services
+
+Both the auth-service (token generator) and customer-service (token validator) use HMAC-SHA256 with the same key. If the `JWT_SECRET` environment variable differs:
+
+- Auth-service signs tokens with `JWT_SECRET=A`
+- Customer-service tries to verify with `JWT_SECRET=B` (or missing)
+- HMAC signature verification fails → security context cleared → **403 Forbidden**
+
+**Fix:** Set the **exact same** `JWT_SECRET` value on both services' Railway Variables pages.
+
+---
+
+### 1️⃣2️⃣ Database Columns Can Be `bytea` — Fix With `columnDefinition`
+
+When deploying Spring Boot services to Railway, the first `ddl-auto: update` run might create columns with incorrect types (e.g., `bytea` instead of `varchar`). This causes runtime errors like:
+
+```
+ERROR: function lower(bytea) does not exist
+```
+
+**Fix in code:** Add `@Column(columnDefinition = "VARCHAR(255)")` to all `String` fields in JPA entities. This forces Hibernate to create `varchar` columns regardless of the environment.
+
+**Fix in database:** Use `spring.jpa.hibernate.ddl-auto: create` for one deploy to drop and recreate all tables with correct types. Then revert to `update` to preserve schema across restarts.
+
+---
+
 ### Deployment Checklist for New Services
 
 Before pushing a new Spring Boot service to Railway:
@@ -455,6 +518,7 @@ Before pushing a new Spring Boot service to Railway:
 - [ ] Add `app.jwt.secret` to `application.yml` with `${JWT_SECRET:fallback-value}`
 - [ ] Add `management.endpoint.health.show-details: always`
 - [ ] Create Dockerfile with multi-stage Maven build
+- [ ] Add explicit `columnDefinition = "VARCHAR(255)"` to all String fields in entities
 - [ ] Push to GitHub
 - [ ] Add service on Railway with correct root directory
 - [ ] Add `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`
