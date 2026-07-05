@@ -33,6 +33,14 @@ export interface CustomerRequest {
   website?: string;
 }
 
+export interface PaginatedCustomers {
+  content: Customer[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+}
+
 export interface CustomerFilters {
   search?: string;
   industry?: string;
@@ -42,8 +50,9 @@ export interface CustomerFilters {
 }
 
 const customerService = {
-  getAll: (filters?: CustomerFilters) =>
-    api.get<Customer[]>('/customers', { params: filters }).then(r => r.data),
+  // Type for paginated API response
+  getAll: (filters?: CustomerFilters & { page?: number; size?: number; sort?: string; direction?: string }) =>
+    api.get<PaginatedCustomers>('/customers', { params: filters }).then(r => r.data),
 
   getById: (id: string) =>
     api.get<Customer>(`/customers/${id}`).then(r => r.data),

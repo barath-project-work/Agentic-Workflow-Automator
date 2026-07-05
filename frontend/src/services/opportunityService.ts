@@ -27,6 +27,14 @@ export interface OpportunityRequest {
   description?: string;
 }
 
+export interface PaginatedOpportunities {
+  content: Opportunity[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+}
+
 export interface OpportunityFilters {
   search?: string;
   stage?: string;
@@ -35,8 +43,9 @@ export interface OpportunityFilters {
 }
 
 const opportunityService = {
-  getAll: (filters?: OpportunityFilters) =>
-    api.get<Opportunity[]>('/opportunities', { params: filters }).then(r => r.data),
+  // Type for paginated API response
+  getAll: (filters?: OpportunityFilters & { page?: number; size?: number; sort?: string; direction?: string }) =>
+    api.get<PaginatedOpportunities>('/opportunities', { params: filters }).then(r => r.data),
 
   getById: (id: string) =>
     api.get<Opportunity>(`/opportunities/${id}`).then(r => r.data),

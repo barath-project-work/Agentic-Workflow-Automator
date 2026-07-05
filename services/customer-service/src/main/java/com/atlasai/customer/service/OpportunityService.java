@@ -6,6 +6,10 @@ import com.atlasai.customer.model.request.OpportunityRequest;
 import com.atlasai.customer.model.response.OpportunityResponse;
 import com.atlasai.customer.repository.OpportunityRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,25 +21,29 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OpportunityService {
 
+    private static final Logger log = LoggerFactory.getLogger(OpportunityService.class);
+
     private final OpportunityRepository opportunityRepository;
 
-    public List<OpportunityResponse> getAllOpportunities() {
-        return opportunityRepository.findAll().stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<OpportunityResponse> getAllOpportunities(Pageable pageable) {
+        return opportunityRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
-    public List<OpportunityResponse> searchOpportunities(String search, String stage,
-                                                          BigDecimal minValue, BigDecimal maxValue) {
+    public Page<OpportunityResponse> searchOpportunities(String search, String stage,
+                                                          BigDecimal minValue, BigDecimal maxValue,
+                                                          Pageable pageable) {
         OpportunityStage stageEnum = null;
         if (stage != null && !stage.isBlank()) {
             try {
                 stageEnum = OpportunityStage.valueOf(stage.toUpperCase());
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+                log.warn("Invalid opportunity stage value: {}", stage);
+            }
         }
 
-        return opportunityRepository.searchOpportunities(search, stageEnum, minValue, maxValue)
-                .stream().map(this::toResponse).toList();
+        return opportunityRepository.searchOpportunities(search, stageEnum, minValue, maxValue, pageable)
+                .map(this::toResponse);
     }
 
     public List<OpportunityResponse> getOpportunitiesByCustomer(UUID customerId) {

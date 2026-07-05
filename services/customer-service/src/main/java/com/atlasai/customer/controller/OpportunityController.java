@@ -5,6 +5,10 @@ import com.atlasai.customer.model.response.OpportunityResponse;
 import com.atlasai.customer.service.OpportunityService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +25,23 @@ public class OpportunityController {
     private final OpportunityService opportunityService;
 
     @GetMapping
-    public ResponseEntity<List<OpportunityResponse>> getAllOpportunities(
+    public ResponseEntity<Page<OpportunityResponse>> getAllOpportunities(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String stage,
             @RequestParam(required = false) BigDecimal minValue,
-            @RequestParam(required = false) BigDecimal maxValue) {
-        List<OpportunityResponse> opportunities = opportunityService.searchOpportunities(
-                search, stage, minValue, maxValue);
+            @RequestParam(required = false) BigDecimal maxValue,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "updatedAt") String sort,
+            @RequestParam(defaultValue = "desc") String direction) {
+
+        Sort sortObj = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sort).ascending()
+                : Sort.by(sort).descending();
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+
+        Page<OpportunityResponse> opportunities = opportunityService.searchOpportunities(
+                search, stage, minValue, maxValue, pageable);
         return ResponseEntity.ok(opportunities);
     }
 

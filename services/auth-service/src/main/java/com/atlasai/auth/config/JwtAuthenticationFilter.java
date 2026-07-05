@@ -1,12 +1,13 @@
 package com.atlasai.auth.config;
 
 import com.atlasai.auth.service.JwtService;
-import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,6 +22,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
@@ -55,10 +58,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-        } catch (JwtException e) {
-            // Invalid or expired JWT — don't set authentication, let request proceed as unauthenticated
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired JWT");
-            return;
+        } catch (Exception e) {
+            // Invalid or expired JWT — clear context and let request proceed.
+            // The request will be rejected by SecurityConfig if the endpoint requires authentication.
+            log.warn("JWT validation failed for request {} {}: {}",
+                    request.getMethod(), request.getRequestURI(), e.getMessage());
+            SecurityContextHolder.clearContext();
         }
 
         filterChain.doFilter(request, response);

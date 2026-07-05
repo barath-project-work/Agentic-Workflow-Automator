@@ -4,6 +4,17 @@ import opportunityService, { OpportunityRequest, OpportunityFilters } from '../s
 export function useOpportunities(filters?: OpportunityFilters) {
   return useQuery({
     queryKey: ['opportunities', filters],
+    queryFn: async () => {
+      const response = await opportunityService.getAll(filters);
+      return response.content;
+    },
+    staleTime: 30_000,
+  });
+}
+
+export function useOpportunitiesPaginated(filters?: OpportunityFilters & { page?: number; size?: number; sort?: string; direction?: string }) {
+  return useQuery({
+    queryKey: ['opportunities', 'paginated', filters],
     queryFn: () => opportunityService.getAll(filters),
     staleTime: 30_000,
   });

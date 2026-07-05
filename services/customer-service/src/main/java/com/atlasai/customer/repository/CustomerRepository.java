@@ -2,6 +2,8 @@ package com.atlasai.customer.repository;
 
 import com.atlasai.customer.model.entity.Customer;
 import com.atlasai.customer.model.enums.CustomerStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,20 +22,28 @@ public interface CustomerRepository extends JpaRepository<Customer, UUID> {
 
     List<Customer> findByLocationContainingIgnoreCase(String location);
 
-    @Query("SELECT c FROM Customer c WHERE " +
+    @Query(value = "SELECT c FROM Customer c WHERE " +
            "(:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
            "OR LOWER(c.company) LIKE LOWER(CONCAT('%', :search, '%')) " +
            "OR LOWER(c.email) LIKE LOWER(CONCAT('%', :search, '%'))) " +
            "AND (:industry IS NULL OR LOWER(c.industry) LIKE LOWER(CONCAT('%', :industry, '%'))) " +
            "AND (:location IS NULL OR LOWER(c.location) LIKE LOWER(CONCAT('%', :location, '%'))) " +
            "AND (:status IS NULL OR c.status = :status) " +
-           "AND (:lastContactedBefore IS NULL OR c.lastContacted < :lastContactedBefore) " +
-           "ORDER BY c.updatedAt DESC")
-    List<Customer> searchCustomers(
+           "AND (:lastContactedBefore IS NULL OR c.lastContacted < :lastContactedBefore)",
+           countQuery = "SELECT COUNT(c) FROM Customer c WHERE " +
+           "(:search IS NULL OR LOWER(c.name) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "OR LOWER(c.company) LIKE LOWER(CONCAT('%', :search, '%')) " +
+           "OR LOWER(c.email) LIKE LOWER(CONCAT('%', :search, '%'))) " +
+           "AND (:industry IS NULL OR LOWER(c.industry) LIKE LOWER(CONCAT('%', :industry, '%'))) " +
+           "AND (:location IS NULL OR LOWER(c.location) LIKE LOWER(CONCAT('%', :location, '%'))) " +
+           "AND (:status IS NULL OR c.status = :status) " +
+           "AND (:lastContactedBefore IS NULL OR c.lastContacted < :lastContactedBefore)")
+    Page<Customer> searchCustomers(
             @Param("search") String search,
             @Param("industry") String industry,
             @Param("location") String location,
             @Param("status") CustomerStatus status,
-            @Param("lastContactedBefore") LocalDateTime lastContactedBefore
+            @Param("lastContactedBefore") LocalDateTime lastContactedBefore,
+            Pageable pageable
     );
 }

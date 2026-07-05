@@ -6,6 +6,10 @@ import com.atlasai.customer.model.request.CustomerRequest;
 import com.atlasai.customer.model.response.CustomerResponse;
 import com.atlasai.customer.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,21 +21,25 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CustomerService {
 
+    private static final Logger log = LoggerFactory.getLogger(CustomerService.class);
+
     private final CustomerRepository customerRepository;
 
-    public List<CustomerResponse> getAllCustomers() {
-        return customerRepository.findAll().stream()
-                .map(this::toResponse)
-                .toList();
+    public Page<CustomerResponse> getAllCustomers(Pageable pageable) {
+        return customerRepository.findAll(pageable)
+                .map(this::toResponse);
     }
 
-    public List<CustomerResponse> searchCustomers(String search, String industry, String location,
-                                                   String status, Integer daysSinceContact) {
+    public Page<CustomerResponse> searchCustomers(String search, String industry, String location,
+                                                   String status, Integer daysSinceContact,
+                                                   Pageable pageable) {
         CustomerStatus statusEnum = null;
         if (status != null && !status.isBlank()) {
             try {
                 statusEnum = CustomerStatus.valueOf(status.toUpperCase());
-            } catch (IllegalArgumentException ignored) {}
+            } catch (IllegalArgumentException ignored) {
+                log.warn("Invalid customer status value: {}", status);
+            }
         }
 
         LocalDateTime lastContactedBefore = null;
@@ -39,8 +47,8 @@ public class CustomerService {
             lastContactedBefore = LocalDateTime.now().minusDays(daysSinceContact);
         }
 
-        return customerRepository.searchCustomers(search, industry, location, statusEnum, lastContactedBefore)
-                .stream().map(this::toResponse).toList();
+        return customerRepository.searchCustomers(search, industry, location, statusEnum, lastContactedBefore, pageable)
+                .map(this::toResponse);
     }
 
     public CustomerResponse getCustomerById(UUID id) {

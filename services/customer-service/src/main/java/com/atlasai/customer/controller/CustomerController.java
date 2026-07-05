@@ -5,11 +5,14 @@ import com.atlasai.customer.model.response.CustomerResponse;
 import com.atlasai.customer.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,14 +23,24 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @GetMapping
-    public ResponseEntity<List<CustomerResponse>> getAllCustomers(
+    public ResponseEntity<Page<CustomerResponse>> getAllCustomers(
             @RequestParam(required = false) String search,
             @RequestParam(required = false) String industry,
             @RequestParam(required = false) String location,
             @RequestParam(required = false) String status,
-            @RequestParam(required = false) Integer daysSinceContact) {
-        List<CustomerResponse> customers = customerService.searchCustomers(
-                search, industry, location, status, daysSinceContact);
+            @RequestParam(required = false) Integer daysSinceContact,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "50") int size,
+            @RequestParam(defaultValue = "updatedAt") String sort,
+            @RequestParam(defaultValue = "desc") String direction) {
+
+        Sort sortObj = direction.equalsIgnoreCase("asc")
+                ? Sort.by(sort).ascending()
+                : Sort.by(sort).descending();
+        Pageable pageable = PageRequest.of(page, size, sortObj);
+
+        Page<CustomerResponse> customers = customerService.searchCustomers(
+                search, industry, location, status, daysSinceContact, pageable);
         return ResponseEntity.ok(customers);
     }
 

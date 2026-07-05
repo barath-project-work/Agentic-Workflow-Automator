@@ -8,6 +8,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +26,8 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthFilter.class);
 
     @Value("${app.jwt.secret}")
     private String jwtSecret;
@@ -65,7 +69,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (Exception e) {
-            // Invalid/expired JWT — skip auth, let security config decide access
+            log.warn("JWT validation failed for {} {}: {}",
+                    request.getMethod(), request.getRequestURI(), e.getMessage());
             SecurityContextHolder.clearContext();
         }
 

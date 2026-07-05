@@ -4,6 +4,17 @@ import customerService, { CustomerRequest, CustomerFilters } from '../services/c
 export function useCustomers(filters?: CustomerFilters) {
   return useQuery({
     queryKey: ['customers', filters],
+    queryFn: async () => {
+      const response = await customerService.getAll(filters);
+      return response.content;
+    },
+    staleTime: 30_000,
+  });
+}
+
+export function useCustomersPaginated(filters?: CustomerFilters & { page?: number; size?: number; sort?: string; direction?: string }) {
+  return useQuery({
+    queryKey: ['customers', 'paginated', filters],
     queryFn: () => customerService.getAll(filters),
     staleTime: 30_000,
   });
