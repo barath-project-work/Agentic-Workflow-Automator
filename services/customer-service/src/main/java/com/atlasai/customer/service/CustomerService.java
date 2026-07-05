@@ -33,6 +33,17 @@ public class CustomerService {
     public Page<CustomerResponse> searchCustomers(String search, String industry, String location,
                                                    String status, Integer daysSinceContact,
                                                    Pageable pageable) {
+
+        // No filters — use simple findAll to avoid custom JPQL query issues on bytea columns
+        if ((search == null || search.isBlank()) &&
+            (industry == null || industry.isBlank()) &&
+            (location == null || location.isBlank()) &&
+            (status == null || status.isBlank()) &&
+            daysSinceContact == null) {
+            return customerRepository.findAll(pageable)
+                    .map(this::toResponse);
+        }
+
         CustomerStatus statusEnum = null;
         if (status != null && !status.isBlank()) {
             try {

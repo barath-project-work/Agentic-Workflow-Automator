@@ -33,6 +33,15 @@ public class OpportunityService {
     public Page<OpportunityResponse> searchOpportunities(String search, String stage,
                                                           BigDecimal minValue, BigDecimal maxValue,
                                                           Pageable pageable) {
+
+        // No filters — use simple findAll to avoid custom JPQL query issues on bytea columns
+        if ((search == null || search.isBlank()) &&
+            (stage == null || stage.isBlank()) &&
+            minValue == null && maxValue == null) {
+            return opportunityRepository.findAll(pageable)
+                    .map(this::toResponse);
+        }
+
         OpportunityStage stageEnum = null;
         if (stage != null && !stage.isBlank()) {
             try {
