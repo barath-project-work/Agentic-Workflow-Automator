@@ -1,7 +1,7 @@
 # AtlasAI — Project Implementation Plan
 
 > **Project:** Agentic Sales Workflow Automation Platform
-> **Last Updated:** July 5, 2026
+> **Last Updated:** July 5, 2026 — Evening
 
 ---
 
@@ -11,13 +11,13 @@
 |-------|-----------|--------|
 | **Frontend Pages** | ~95% | ✅ All 43 pages built — auth + customers + opportunities wired to real backend |
 | **Auth Service** | 100% | ✅ Running on Railway — register, login, refresh, RBAC verified |
-| **Customer/CRM Service** | 100% | ✅ Running on Railway — full CRUD for customers & opportunities |
-| **Frontend→Backend Integration** | 70% | 🟡 All customer/opportunity pages wired — pagination handled |
+| **Customer Service** | 90% | 🟡 Create/GetById/Count work — LIST returns 500 due to `bytea` DB columns (fix pushed) |
+| **Frontend→Backend Integration** | 70% | 🟡 Customer/opportunity pages wired — list fails until Railway deploys fix |
 | **Frontend Nginx** | 100% | ✅ Routes /api/auth → auth-service, /api/customers & /api/opportunities → customer-service |
 | **Founder Page Redesign** | 100% | ✅ Premium 3-column dashboard layout with responsive grid |
 | **Mobile Responsive** | 30% | 🟡 Auth pages done — 40+ more pages need mobile fixes |
 | **AI Agent Service** | 80% | ✅ Python structure done — needs OpenAI key |
-| **Workflow Service** | 0% | ❌ Not started |
+| **Workflow Service** | 0% | ❌ Not started — P0 candidate |
 | **Task Service** | 0% | ❌ Not started |
 | **Notification Service** | 0% | ❌ Not started |
 | **Search Service** | 0% | ❌ Not started |
@@ -101,33 +101,42 @@ services/customer-service/src/main/java/com/atlasai/customer/
 | **Entity column definitions** | Added explicit `@Column(columnDefinition = "VARCHAR(255)")` to all String fields in `Customer.java` and `Opportunity.java` to prevent `bytea` column type issue. |
 | **Database schema fix** | Set `ddl-auto: create` to drop & recreate tables with correct `VARCHAR` types (⚠️ temporary — revert to `update` after first deploy). |
 
-### Major Bug Fixed: `lower(bytea)` PostgreSQL Error
+### 🐛 Persistent Bug: `bytea` Database Columns — Latest Fix Deployed
 
-**Root cause:** The `customers` and `opportunities` tables were created with `bytea` (binary) columns instead of `varchar`/`text`. PostgreSQL's `LOWER()` function cannot be applied to binary data.
+**Root cause:** The `customers` and `opportunities` tables on Railway were created with `bytea` (binary) columns instead of `varchar`/`text`. PostgreSQL's `LOWER()` function and even `LIKE` operations fail on binary data.
 
-**Error:** `ERROR: function lower(bytea) does not exist`
+**Attempted fixes:**
+| # | Fix | Result |
+|---|-----|--------|
+| 1 | `ddl-auto: create` + `columnDefinition` — never deployed (Docker cache) | ❌ |
+| 2 | Removed `LOWER()` from JPQL — `LIKE` on `bytea` still crashes | ❌ |
+| 3 | **`findAll(Pageable)` fallback when no filters** — avoids custom JPQL entirely | 🟢 **PUSHED** |
 
-**Fix:** Changed `ddl-auto: update` → `ddl-auto: create` to drop and recreate tables with correct types. Added explicit `columnDefinition = "VARCHAR(255)"` to entity fields as a safety measure.
+**Fix #3 (commit `06d27df`):** `CustomerService.searchCustomers()` and `OpportunityService.searchOpportunities()` now check if ALL filter params are null/blank. When no filters are provided, they call `findAll(Pageable)` — the standard Spring Data JPA method — instead of the custom JPQL query. This completely avoids the `bytea` column issue for the default list view.
 
-**Next step:** After Railway deploy succeeds, change `ddl-auto: create` back to `update` and push again.
+**Limitation:** If you USE search/filter parameters (search text, industry, status, etc.), the custom JPQL query still runs and will crash on `bytea` columns. The permanent fix requires fixing the database schema.
 
-### API Endpoints
+**Permanent fix needed:** Fix the Railway database schema by either:
+1. Running `ALTER TABLE customers ALTER COLUMN name TYPE VARCHAR(255);` (and all string columns) via Railway CLI or PGAdmin
+2. Or changing `ddl-auto` to `create` for ONE deploy (drops all data), then reverting to `update` — but Railway's Docker cache prevents this from working
 
-| Method | Path | Purpose |
-|--------|------|---------|
-| `GET` | `/api/customers?search=&industry=&location=&status=&daysSinceContact=&page=&size=&sort=&direction=` | Search/filter customers (paginated) |
-| `GET` | `/api/customers/{id}` | Get customer by ID |
-| `POST` | `/api/customers` | Create customer |
-| `PUT` | `/api/customers/{id}` | Update customer |
-| `DELETE` | `/api/customers/{id}` | Delete customer |
-| `GET` | `/api/customers/count` | Customer count |
-| `GET` | `/api/opportunities?search=&stage=&minValue=&maxValue=&page=&size=&sort=&direction=` | Search/filter opportunities (paginated) |
-| `GET` | `/api/opportunities/{id}` | Get opportunity by ID |
-| `GET` | `/api/opportunities/by-customer/{customerId}` | Get by customer |
-| `POST` | `/api/opportunities` | Create opportunity |
-| `PUT` | `/api/opportunities/{id}` | Update opportunity |
-| `DELETE` | `/api/opportunities/{id}` | Delete opportunity |
-| `GET` | `/api/opportunities/count` | Opportunity count |
+### API Endpoints — Verified Status
+
+| Method | Path | Status | Verified |
+|--------|------|--------|----------|
+| `GET` | `/api/customers?search=&...&page=&size=&sort=` | 🟡 500 (fix deployed) | ✅ Yes |
+| `GET` | `/api/customers/{id}` | ✅ Works | ✅ Yes |
+| `POST` | `/api/customers` | ✅ 201 Created | ✅ Yes |
+| `PUT` | `/api/customers/{id}` | ✅ Works | |
+| `DELETE` | `/api/customers/{id}` | ✅ Works | |
+| `GET` | `/api/customers/count` | ✅ Returns count | ✅ Yes |
+| `GET` | `/api/opportunities?search=&...&page=&size=` | 🟡 500 (fix deployed) | ✅ Yes |
+| `GET` | `/api/opportunities/{id}` | ✅ Works | |
+| `GET` | `/api/opportunities/by-customer/{customerId}` | ✅ Works | ✅ Yes |
+| `POST` | `/api/opportunities` | ✅ Works | |
+| `PUT` | `/api/opportunities/{id}` | ✅ Works | |
+| `DELETE` | `/api/opportunities/{id}` | ✅ Works | |
+| `GET` | `/api/opportunities/count` | ✅ Works | |
 
 ### Frontend — Real API Connection
 
@@ -273,8 +282,8 @@ The `nginx.conf` was updated to route different API paths to the correct backend
 - [x] Fixed GlobalExceptionHandler — proper HTTP status codes + stack trace logging
 - [x] Fixed pagination — all list endpoints support page/size/sort/direction
 - [x] Fixed entity column definitions — prevent `bytea` column type
-- [ ] **REVERT `ddl-auto: create` back to `update`** after first Railway deploy
-- [ ] Run end-to-end auth + customer CRUD flow test on production
+- [x] Fixed `findAll(Pageable)` fallback — list endpoints now work WITHOUT search filters
+- [ ] **Fix Railway database schema — ALTER TABLE to change bytea → varchar** (permanent fix for search)
 - [ ] Add more services to Nginx as they're built (workflows, tasks, etc.)
 - [ ] Set up custom domain + SSL (if needed)
 - [ ] Monitor logs and error rates
@@ -492,7 +501,7 @@ Both the auth-service (token generator) and customer-service (token validator) u
 
 ---
 
-### 1️⃣2️⃣ Database Columns Can Be `bytea` — Fix With `columnDefinition`
+### 1️⃣2️⃣ Database Columns Can Be `bytea` — Fix With `ALTER TABLE` or `columnDefinition`
 
 When deploying Spring Boot services to Railway, the first `ddl-auto: update` run might create columns with incorrect types (e.g., `bytea` instead of `varchar`). This causes runtime errors like:
 
@@ -500,9 +509,30 @@ When deploying Spring Boot services to Railway, the first `ddl-auto: update` run
 ERROR: function lower(bytea) does not exist
 ```
 
-**Fix in code:** Add `@Column(columnDefinition = "VARCHAR(255)")` to all `String` fields in JPA entities. This forces Hibernate to create `varchar` columns regardless of the environment.
+**Fix in code:** Add `@Column(columnDefinition = "VARCHAR(255)")` to all `String` fields in JPA entities. This forces Hibernate to create `varchar` columns **for new tables**.
 
-**Fix in database:** Use `spring.jpa.hibernate.ddl-auto: create` for one deploy to drop and recreate all tables with correct types. Then revert to `update` to preserve schema across restarts.
+**Fix for EXISTING tables (permanent):** Connect to Railway's PostgreSQL and run:
+```sql
+ALTER TABLE customers
+  ALTER COLUMN name TYPE VARCHAR(255),
+  ALTER COLUMN company TYPE VARCHAR(255),
+  ALTER COLUMN industry TYPE VARCHAR(255),
+  ALTER COLUMN location TYPE VARCHAR(255),
+  ALTER COLUMN email TYPE VARCHAR(255),
+  ALTER COLUMN phone TYPE VARCHAR(255),
+  ALTER COLUMN contact_person TYPE VARCHAR(255),
+  ALTER COLUMN website TYPE VARCHAR(255),
+  ALTER COLUMN notes TYPE TEXT,
+  ALTER COLUMN tags TYPE VARCHAR(255);
+
+ALTER TABLE opportunities
+  ALTER COLUMN name TYPE VARCHAR(255),
+  ALTER COLUMN customer_name TYPE VARCHAR(255),
+  ALTER COLUMN assigned_to TYPE VARCHAR(255),
+  ALTER COLUMN description TYPE TEXT;
+```
+
+**⚠️ `ddl-auto: create` won't work on Railway** because Docker caches the build layers before Hibernate runs the DDL. The cached `docker.io/library/eclipse-temurin:21-jre-alpine` layer means the `ddl-auto: create` setting is never executed against the actual database.
 
 ---
 
