@@ -1,319 +1,128 @@
 <p align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/AtlasAI-%F0%9F%A4%96%20Agentic%20Sales%20Automation-8A2BE2?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxOCIgZmlsbD0iIzhBMkJFMiIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjEyIiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjYiIGZpbGw9IiM4QTJCRTIiLz48L3N2Zz4=">
-    <img alt="AtlasAI Logo" src="https://img.shields.io/badge/AtlasAI-%F0%9F%A4%96%20Agentic%20Sales%20Automation-8A2BE2?style=for-the-badge">
+    <source media="(prefers-color-scheme: dark)" srcset="https://img.shields.io/badge/AtlasAI-Agentic%20Sales%20Automation-8A2BE2?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48Y2lyY2xlIGN4PSIyMCIgY3k9IjIwIiByPSIxOCIgZmlsbD0iIzhBMkJFMiIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjEyIiBmaWxsPSJ3aGl0ZSIvPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjYiIGZpbGw9IiM4QTJCRTIiLz48L3N2Zz4=">
+    <img alt="AtlasAI" src="https://img.shields.io/badge/AtlasAI-Agentic%20Sales%20Automation-8A2BE2?style=for-the-badge">
   </picture>
 </p>
 
 <p align="center">
   <b>Intelligent Agentic Workflow Automation for Enterprise Sales Teams</b>
+  <br/>
+  <i>Java 21 · Spring Boot 3.3 · React 18 · TypeScript · PostgreSQL · Docker · Railway</i>
 </p>
 
 <p align="center">
   <img alt="Java 21" src="https://img.shields.io/badge/Java-21-%23ED8B00?style=flat-square&logo=openjdk&logoColor=white">
-  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-3.x-%236DB33F?style=flat-square&logo=spring&logoColor=white">
-  <img alt="React" src="https://img.shields.io/badge/React-18.x-%2361DAFB?style=flat-square&logo=react&logoColor=white">
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.x-%233178C6?style=flat-square&logo=typescript&logoColor=white">
-  <img alt="Kafka" src="https://img.shields.io/badge/Apache_Kafka-%23231F20?style=flat-square&logo=apache-kafka&logoColor=white">
+  <img alt="Spring Boot" src="https://img.shields.io/badge/Spring_Boot-3.3-%236DB33F?style=flat-square&logo=spring&logoColor=white">
+  <img alt="React" src="https://img.shields.io/badge/React-18-%2361DAFB?style=flat-square&logo=react&logoColor=white">
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5-%233178C6?style=flat-square&logo=typescript&logoColor=white">
   <img alt="PostgreSQL" src="https://img.shields.io/badge/PostgreSQL-16-%234169E1?style=flat-square&logo=postgresql&logoColor=white">
-  <img alt="Redis" src="https://img.shields.io/badge/Redis-%23FF4438?style=flat-square&logo=redis&logoColor=white">
   <img alt="Docker" src="https://img.shields.io/badge/Docker-%232496ED?style=flat-square&logo=docker&logoColor=white">
-  <img alt="Kubernetes" src="https://img.shields.io/badge/Kubernetes-%23326CE5?style=flat-square&logo=kubernetes&logoColor=white">
-  <img alt="OpenAI" src="https://img.shields.io/badge/OpenAI-LLM-%23412991?style=flat-square&logo=openai&logoColor=white">
+  <img alt="Railway" src="https://img.shields.io/badge/Railway-Deployed-%230B0D0E?style=flat-square&logo=railway&logoColor=white">
+  <img alt="JWT" src="https://img.shields.io/badge/JWT-HMACSHA256-%23000000?style=flat-square&logo=json-web-tokens&logoColor=white">
+  <img alt="MUI" src="https://img.shields.io/badge/MUI-5-%23007FFF?style=flat-square&logo=mui&logoColor=white">
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-5-%23646CFF?style=flat-square&logo=vite&logoColor=white">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.11-%233776AB?style=flat-square&logo=python&logoColor=white">
+  <img alt="FastAPI" src="https://img.shields.io/badge/FastAPI-%23009688?style=flat-square&logo=fastapi&logoColor=white">
 </p>
 
 ---
 
 ## 📋 Table of Contents
 
-- [Vision & Mission](#-vision--mission)
-- [What is AtlasAI?](#-what-is-atlasai)
-- [Architecture Overview](#-architecture-overview)
-  - [High-Level System Diagram](#high-level-system-diagram)
-  - [Database ER Diagram](#database-er-diagram)
-  - [Workflow Sequence Diagram](#workflow-sequence-diagram)
+- [Overview](#-overview)
+- [Architecture](#-architecture)
+- [Deployed Live Services](#-deployed-live-services)
 - [Tech Stack](#-tech-stack)
-  - [Backend](#backend)
-  - [Frontend](#frontend)
-  - [Data & Storage](#data--storage)
-  - [Event Streaming](#event-streaming)
-  - [AI & Agent Frameworks](#ai--agent-frameworks)
-  - [DevOps & Infrastructure](#devops--infrastructure)
-  - [Observability](#observability)
-- [Features](#-features)
-  - [MVP Core Features](#mvp-core-features)
-  - [Stretch Goals](#stretch-goals)
-- [Agent Architecture](#-agent-architecture)
 - [Project Structure](#-project-structure)
+- [Backend Deep Dive](#-backend-deep-dive)
+  - [Auth Service](/services/auth-service)
+  - [Customer/CRM Service](/services/customer-service)
+  - [AI Agent Service](/services/ai-agent-service)
+  - [Scaffolded Services](/services)
+- [Frontend Deep Dive](#-frontend-deep-dive)
+- [API Reference](#-api-reference)
+- [Infrastructure & DevOps](#-infrastructure--devops)
+- [Diagnosis & Debugging Highlights](#-diagnosis--debugging-highlights)
 - [Getting Started](#-getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Local Development Setup](#local-development-setup)
-  - [Running the Services](#running-the-services)
-- [API Overview](#-api-overview)
-- [Development Roadmap (8 Weeks)](#-development-roadmap-8-weeks)
-- [Security & Compliance](#-security--compliance)
-- [Testing Strategy](#-testing-strategy)
-- [Contributing](#-contributing)
-- [License](#-license)
+- [Deployment to Railway](#-deployment-to-railway)
+- [What's Next](#-whats-next)
 
 ---
 
-## 🌟 Vision & Mission
+## 🚀 Overview
 
-### Vision
+**AtlasAI** is a full-stack microservices platform for **agentic sales workflow automation**. It enables sales teams to manage customers, track opportunities, and automate follow-ups through AI-powered agents.
 
-Empower sales teams by **automating routine sales workflows** through intelligent AI agents. Sales goals become high-level tasks; the system autonomously handles data lookup, communication, and record updates — no manual follow-ups, no missed leads, no repetitive busywork.
+The platform follows a **microservices architecture** with separate, independently deployable services communicating over REST APIs, secured by JWT-based authentication and authorization.
 
-### Mission
+### Live Demo
 
-Build an enterprise-grade **Agentic Sales Workflow Automation Platform** that mirrors the promise of Salesforce's **Agentforce** — where AI agents *plan, act, and collaborate* across systems — but with the flexibility, transparency, and control that modern sales operations demand.
-
----
-
-## 🤖 What is AtlasAI?
-
-**AtlasAI** allows sales representatives and managers to issue high-level goals in natural language (e.g., *"Follow up with healthcare leads in Chennai"*) and have the system's AI **orchestrator agent** autonomously:
-
-1. Query CRM data for matching leads
-2. Draft and send personalized follow-up emails
-3. Schedule meetings with interested prospects
-4. Update CRM records
-5. Report comprehensive outcomes
-
-This is **not** a static chatbot — it's a **delegation engine**. A user asks *"What needs to be done?"* and AI agents execute multiple steps to deliver the outcome.
-
-### Key Benefits
-
-| Benefit | Impact |
-|---------|--------|
-| ⚡ **Dramatic Time Savings** | Automates hours of manual follow-up work per rep per day |
-| 📈 **Higher Conversion Rates** | Faster lead responses → warmer prospects → more closed deals |
-| 🔍 **Transparent AI Oversight** | Every agent action is auditable and traceable |
-| 🎯 **Consistent Execution** | No more missed follow-ups or dropped leads |
-
-### Target Users
-
-| Persona | Needs |
-|---------|-------|
-| **Sales Representative** | Automate follow-ups, lead nurturing, and meeting scheduling |
-| **Sales Manager** | Set business rules, define templates, monitor KPIs |
-| **Ops / IT Admin** | Configure integrations, manage security, review audit logs |
+| Component | URL | Status |
+|-----------|-----|--------|
+| **Frontend** | [`cheerful-respect-production-1c45.up.railway.app`](https://cheerful-respect-production-1c45.up.railway.app) | 🟢 Live |
+| **Auth API** | [`agentic-workflow-automator-production.up.railway.app`](https://agentic-workflow-automator-production.up.railway.app) | 🟢 Live |
+| **Customer API** | [`customer-service-production-0ff7.up.railway.app`](https://customer-service-production-0ff7.up.railway.app) | 🟢 Live |
 
 ---
 
-## 🏗 Architecture Overview
+## 🏗 Architecture
 
-AtlasAI uses a **microservices, event-driven architecture** with clear separation of concerns and modern cloud-native infrastructure.
-
-### High-Level System Diagram
-
-```mermaid
-graph TB
-    subgraph "🌐 Frontend"
-        UI["React/TypeScript<br/>Single-Page App"]
-    end
-
-    subgraph "🚪 API Gateway"
-        GW["Spring Cloud Gateway<br/>Routing · Auth · Rate Limiting"]
-    end
-
-    subgraph "⚙️ Microservices (Java 21 / Spring Boot 3.x)"
-        AUTH["🔐 Auth Service<br/>OAuth2 / JWT"]
-        CRM["📇 Customer/CRM Service<br/>Customers · Opportunities"]
-        WF["🔄 Sales Workflow Service<br/>Orchestrator"]
-        TSK["📋 Task Service<br/>CRUD for agent tasks"]
-        NOTIF["📧 Notification Service<br/>Email · Calendar"]
-        SRCH["🔎 Search/Vector Service<br/>pgvector · RAG"]
-    end
-
-    subgraph "🧠 AI Layer"
-        AGENT["🤖 AI Agent Service (Python)<br/>Orchestrator · Planner · Tools"]
-        LLM["OpenAI / LLM APIs<br/>GPT-4 · GPT-4o-mini"]
-    end
-
-    subgraph "💾 Data & Infrastructure"
-        PG[("PostgreSQL<br/>+ pgvector")]
-        RD[("Redis<br/>Cache · Sessions")]
-        KF[("Apache Kafka<br/>Event Bus")]
-        OBJ[("Object Storage<br/>S3 / MinIO")]
-    end
-
-    subgraph "📊 Observability"
-        PROM[("Prometheus")]
-        GRAF[("Grafana")]
-        OTEL[("OpenTelemetry")]
-        ELK[("ELK Stack<br/>Logging")]
-    end
-
-    %% Connections
-    UI -->|HTTPS| GW
-    
-    GW --> AUTH
-    GW --> CRM
-    GW --> WF
-    GW --> TSK
-    GW --> NOTIF
-
-    AUTH --> PG
-    CRM --> PG
-    CRM --> RD
-    TSK --> PG
-    
-    NOTIF -->|publish| KF
-    WF -->|publish| KF
-    KF --> CRM
-    KF --> TSK
-    KF --> WF
-    KF --> NOTIF
-    
-    WF -->|REST/gRPC| AGENT
-    AGENT -->|queries| PG
-    AGENT -->|caches| RD
-    AGENT --> SRCH
-    AGENT --> LLM
-    AGENT --> NOTIF
-    AGENT --> OBJ
-
-    %% Observability links
-    AUTH -.->|metrics| PROM
-    CRM -.->|metrics| PROM
-    WF -.->|metrics| PROM
-    PROM -.-> GRAF
-    OTEL -.->|traces| GRAF
+```
+┌─────────────────────────────────────────────────────────────┐
+│                        🌐 Frontend                           │
+│              React 18 · TypeScript · MUI 5 · Vite           │
+│                    (Nginx reverse proxy)                     │
+├───────────────┬─────────────────────────────┬───────────────┤
+│  /api/auth/*  │   /api/customers/*          │ /api/opportunities/* │
+│       │       │         │                   │       │       │
+│       ▼       │         ▼                   │       ▼       │
+│  ┌─────────┐  │   ┌──────────────────┐      │  ┌─────────┐  │
+│  │  Auth   │  │   │   Customer/CRM   │      │  │         │  │
+│  │ Service │  │   │     Service      │      │  │  Same   │  │
+│  │ :8081   │  │   │     :8082        │      │  │ Service │  │
+│  └────┬────┘  │   └────────┬─────────┘      │  └─────────┘  │
+│       │       │            │                 │               │
+│       ▼       │            ▼                 │               │
+│  ┌─────────┐  │   ┌──────────────────┐      │               │
+│  │PostgreSQL│  │   │   PostgreSQL    │      │               │
+│  │ (Users)  │  │   │(Customers+Opps) │      │               │
+│  └─────────┘  │   └──────────────────┘      │               │
+└───────────────┴─────────────────────────────┴───────────────┘
+                        │
+                        ▼
+              ┌──────────────────┐
+              │   AI Agent       │
+              │   Service        │
+              │   (Python/FastAPI)│
+              │   :8087          │
+              └──────────────────┘
 ```
 
-### Database ER Diagram
+### Architecture Highlights
 
-```mermaid
-erDiagram
-    CUSTOMER {
-        UUID id PK
-        string name
-        string industry
-        string location
-        string email
-        string phone
-        string contact_person
-        datetime last_contacted
-        datetime created_at
-        datetime updated_at
-    }
-    
-    OPPORTUNITY {
-        UUID id PK
-        string name
-        string status
-        string stage
-        decimal value
-        date close_date
-        string description
-        UUID customer_id FK
-        UUID assigned_to FK
-        datetime created_at
-        datetime updated_at
-    }
-    
-    TASK {
-        UUID id PK
-        string type "EMAIL | MEETING | CALL | FOLLOW_UP"
-        string status "PENDING | IN_PROGRESS | COMPLETED | FAILED"
-        datetime due_date
-        string description
-        string result
-        UUID opportunity_id FK
-        UUID workflow_run_id FK
-        datetime created_at
-    }
-    
-    WORKFLOW_RUN {
-        UUID id PK
-        string goal
-        string status "RUNNING | COMPLETED | FAILED | BLOCKED"
-        UUID requested_by FK
-        jsonb plan
-        jsonb result
-        datetime created_at
-        datetime completed_at
-    }
-    
-    USER {
-        UUID id PK
-        string username
-        string password_hash
-        string email
-        string role "ROLE_USER | ROLE_MANAGER | ROLE_ADMIN"
-        datetime created_at
-    }
-    
-    AUDIT_LOG {
-        UUID id PK
-        UUID actor_id FK
-        string action_type
-        jsonb details
-        string entity_type
-        UUID entity_id
-        datetime created_at
-    }
+| Principle | Implementation |
+|-----------|---------------|
+| **Microservices** | Each service is a standalone Spring Boot application with its own database schema, build pipeline, and Docker container |
+| **Stateless Auth** | JWT tokens (HMAC-SHA256) carry user identity and role — no server-side sessions |
+| **API Gateway Pattern** | Nginx routes frontend requests to the correct backend service by URL path |
+| **Separation of Concerns** | Auth, CRM, Workflow, Tasks, Notifications, and AI are all separate services |
+| **Containerization** | Each service has a multi-stage Dockerfile for production deployment |
 
-    CUSTOMER ||--o{ OPPORTUNITY : "has"
-    OPPORTUNITY ||--o{ TASK : "includes"
-    USER ||--o{ WORKFLOW_RUN : "requests"
-    USER ||--o{ OPPORTUNITY : "assigned"
-    WORKFLOW_RUN ||--o{ TASK : "generates"
-    USER ||--o{ AUDIT_LOG : "performs"
-```
+---
 
-### Workflow Sequence Diagram
+## 🌐 Deployed Live Services
 
-A typical sequence for a *"Follow Up Leads"* workflow:
-
-```mermaid
-sequenceDiagram
-    actor SalesRep as 👤 Sales Rep
-    participant UI as 🖥 Frontend
-    participant GW as 🚪 API Gateway
-    participant AUTH as 🔐 Auth Service
-    participant WF as 🔄 Workflow Service
-    participant AGENT as 🤖 AI Agent
-    participant CRM as 📇 CRM Service
-    participant EMAIL as 📧 Email Agent
-    participant CAL as 📅 Calendar Agent
-
-    SalesRep->>UI: "Follow up healthcare leads in Chennai"
-    UI->>GW: POST /api/workflow {goal, JWT}
-    GW->>AUTH: Validate JWT
-    AUTH-->>GW: ✅ OK (ROLE_USER)
-    GW->>WF: Start workflow
-    WF->>WF: Create WORKFLOW_RUN (RUNNING)
-    WF->>AGENT: startAgent(goal, context)
-    
-    Note over AGENT: 🧠 Planner LLM breaks down goal
-    
-    AGENT->>CRM: searchCustomers(industry="Healthcare", location="Chennai", daysSinceContact>=10)
-    CRM-->>AGENT: [{id:123, name:"Acme Corp", ...}]
-    
-    alt Customers Found
-        AGENT->>EMAIL: sendEmail(to=customers, subject="Follow-up", body=personalized)
-        EMAIL-->>AGENT: {sent: 5, failed: 0}
-        
-        Note over AGENT: 📊 LLM evaluates responses
-        
-        AGENT->>CAL: scheduleMeetings(interestedCustomers, slots)
-        CAL-->>AGENT: {scheduled: 3}
-        
-        AGENT->>CRM: updateLastContact(customerIds)
-        CRM-->>AGENT: ✅ Updated
-    end
-    
-    AGENT->>WF: workflowCompleted(resultReport)
-    WF->>WF: Update WORKFLOW_RUN (COMPLETED)
-    
-    Note over AGENT: 📝 Summary: 5 emails sent, 3 meetings scheduled
-    
-    WF-->>GW: 200 OK {summary}
-    GW-->>UI: Display results
-    UI-->>SalesRep: 📊 "5 emails sent, 3 meetings scheduled"
-```
+| Service | Port | Stack | Status | What It Does |
+|---------|------|-------|--------|-------------|
+| **Frontend** | 80 (Nginx) | React, TypeScript, Vite, MUI | 🟢 Deployed | 40+ page SPA with auth, dashboard, customer management, opportunity tracking, admin panels |
+| **Auth Service** | 8081 | Java 21, Spring Boot 3.3, JPA, PostgreSQL | 🟢 Deployed | User registration, login, JWT generation/validation, RBAC |
+| **Customer Service** | 8082 | Java 21, Spring Boot 3.3, JPA, PostgreSQL | 🟢 Deployed | Customer CRUD, Opportunity CRUD, paginated search, JWT-protected APIs |
+| **AI Agent Service** | 8087 | Python 3.11, FastAPI, OpenAI SDK | 🟡 Scaffolded | Orchestrator agent with CRM/Email/Calendar tool agents — needs OpenAI API key |
+| **Workflow Service** | 8083 | Java 21 (scaffolded) | ⬜ Not started | Workflow orchestration engine |
+| **Task Service** | 8084 | Java 21 (scaffolded) | ⬜ Not started | Task management for workflow steps |
+| **Notification Service** | 8085 | Java 21 (scaffolded) | ⬜ Not started | Email/calendar integration |
+| **Search Service** | 8086 | Java 21 (scaffolded) | ⬜ Not started | Vector search with pgvector |
 
 ---
 
@@ -321,109 +130,433 @@ sequenceDiagram
 
 ### Backend
 
-| Technology | Purpose | Version |
-|------------|---------|---------|
-| **Java** | Core language for microservices | 21 (LTS) |
-| **Spring Boot** | Application framework | 3.x |
-| **Spring Security** | OAuth2 / JWT authentication | 6.x |
-| **Spring Data JPA** | Database access & ORM | 3.x |
-| **Spring Cloud Gateway** | API gateway & routing | 4.x |
-| **Spring Kafka** | Event-driven messaging | 3.x |
-| **Spring Cache** | Caching abstraction | 3.x |
-| **Maven / Gradle** | Build & dependency management | - |
+| Technology | Version | Purpose | Used In |
+|------------|---------|---------|---------|
+| **Java** | 21 (LTS) | Primary backend language | All services |
+| **Spring Boot** | 3.3.2 | Application framework | All Java services |
+| **Spring Security** | 6.x | Authentication & authorization | Auth, Customer services |
+| **Spring Data JPA** | 3.x | ORM & database access | Auth, Customer services |
+| **Spring Validation** | 3.x | Request validation (Jakarta Bean Validation) | Auth, Customer services |
+| **Spring Actuator** | 3.x | Health checks & metrics | Auth, Customer services |
+| **JWT (JJWT)** | 0.12.6 | Stateless token auth | Auth, Customer services |
+| **PostgreSQL** | 16 | Relational database | Auth, Customer services |
+| **Lombok** | — | Boilerplate reduction | Auth, Customer services |
+| **Maven** | 3.9+ | Build & dependency management | All Java services |
 
 ### Frontend
 
-| Technology | Purpose | Version |
+| Technology | Version | Purpose |
 |------------|---------|---------|
-| **React** | UI library | 18.x |
-| **TypeScript** | Type-safe JavaScript | 5.x |
-| **React Router** | Client-side routing | 6.x |
-| **React Hook Form** | Form management | - |
-| **Material UI** | Component library | 5.x |
-| **Axios** | HTTP client | - |
-| **React Context / Redux** | State management | - |
+| **React** | 18.3.1 | UI library |
+| **TypeScript** | 5.5.3 | Type-safe JavaScript |
+| **Vite** | 5.3.4 | Build tool & dev server |
+| **Material UI (MUI)** | 5.16.4 | Component library & design system |
+| **React Router** | 6.26.0 | Client-side routing |
+| **Zustand** | 4.5.4 | Lightweight state management |
+| **TanStack Query** | 5.51.0 | Server state & caching |
+| **Axios** | 1.7.2 | HTTP client with interceptors |
+| **React Hook Form** | 7.52.1 | Form state management |
+| **Recharts** | 2.12.7 | Sales analytics charts |
+| **date-fns** | 3.6.0 | Date utilities |
 
-### Data & Storage
+### AI Layer (Scaffolded)
 
-| Technology | Purpose |
-|------------|---------|
-| **PostgreSQL 16** | Primary relational database (ACID compliant) |
-| **pgvector** | Vector similarity search extension (RAG embeddings) |
-| **Redis** | In-memory caching, session store, JWT revocation |
-| **MinIO / S3** | Object storage for large documents & logs |
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Python** | 3.11+ | AI agent runtime |
+| **FastAPI** | 0.111 | REST API for agent service |
+| **OpenAI SDK** | ≥1.35 | LLM integration (GPT-4, GPT-4o-mini) |
+| **pgvector** | — | Vector similarity search for RAG |
 
-### Event Streaming
-
-| Technology | Purpose |
-|------------|---------|
-| **Apache Kafka** | Asynchronous event bus for service decoupling |
-| **Schema Registry** | Event schema validation (Avro / JSON Schema) |
-
-### AI & Agent Frameworks
-
-| Technology | Purpose | Language |
-|------------|---------|----------|
-| **OpenAI Agents SDK** | Core agent orchestration & tool calling | Python / TypeScript |
-| **LangChain / LangGraph** | Multi-agent workflow graphs *(optional)* | Python |
-| **LlamaIndex** | RAG pipeline & document indexing | Python |
-| **pgvector** | Vector store for embeddings & semantic search | SQL/Python |
-| **OpenAI API** | GPT-4 / GPT-4o-mini for reasoning & generation | REST |
-
-### DevOps & Infrastructure
+### Infrastructure
 
 | Technology | Purpose |
 |------------|---------|
-| **Docker** | Containerization of all services |
-| **Docker Compose** | Local development orchestration |
-| **Kubernetes (K8s)** | Production container orchestration |
-| **GitHub Actions** | CI/CD pipeline automation |
-| **Helm Charts** | Kubernetes package management |
-
-### Observability
-
-| Technology | Purpose |
-|------------|---------|
-| **Prometheus** | Metrics collection & alerting |
-| **Grafana** | Dashboards & visualization |
-| **OpenTelemetry** | Distributed tracing across services |
-| **ELK Stack** | Centralized logging (Elasticsearch, Logstash, Kibana) |
-| **Jaeger** | Trace visualization & debugging |
+| **Docker** | Multi-stage container builds |
+| **Docker Compose** | Local development orchestration (PostgreSQL, Redis, Kafka, pgAdmin) |
+| **Nginx** | Reverse proxy, SPA serving, API routing |
+| **GitHub Actions** | CI/CD — builds all 6 Java services + frontend on push |
+| **Railway** | Cloud deployment with auto-deploy from GitHub |
 
 ---
 
-## ✨ Features
+## 📁 Project Structure
 
-### MVP Core Features
-
-- [x] **🔐 Secure Authentication** — OAuth2 with JWT, role-based access control (Admin, Manager, User)
-- [x] **🎯 Goal-Oriented Task Creation** — Natural language input for sales goals
-- [x] **🧠 AI Orchestrator Agent** — LLM-powered planner that decomposes goals into actionable subtasks
-- [x] **🔧 Tool Agents** — Specialized agents for CRM queries, email campaigns, calendar scheduling
-- [x] **📊 Workflow Tracking** — Real-time status updates for each workflow step
-- [x] **📇 CRM Integration** — Customer & opportunity CRUD with search/filter APIs
-- [x] **📬 Email Integration** — Send personalized follow-up emails (via SendGrid / SMTP)
-- [x] **📅 Calendar Integration** — Schedule meetings with prospects
-- [x] **📋 Task Management** — View and manage AI-generated tasks
-- [x] **🔍 Audit Logging** — Full traceability of all AI actions
-- [x] **🐳 Docker Compose** — One-command local development environment
-
-### Stretch Goals
-
-- [ ] **🧠 RAG Memory** — Agent memory via vector embeddings (pgvector) for context-aware conversations
-- [ ] **💬 Interactive Chat UI** — Conversational interface for agent interaction & feedback
-- [ ] **📈 Analytics Dashboard** — Real-time sales metrics, agent performance, conversion tracking
-- [ ] **🔁 Multi-Step Planning** — Dynamic replanning based on intermediate results
-- [ ] **🛡️ Guardrails Engine** — Business rule enforcement & compliance checks
-- [ ] **🌐 Multi-Channel Notifications** — SMS (Twilio), Slack, Teams integration
-- [ ] **📊 Advanced Observability** — Auto-scaling on K8s, multi-env CI/CD, alerting
-- [ ] **🤖 Fine-Tuned Models** — Domain-specific sales LLM fine-tuning
+```
+atlasai/
+│
+├── services/                           # Backend microservices
+│   ├── auth-service/                   # 🔐 JWT auth (Spring Boot)
+│   │   ├── src/main/java/com/atlasai/auth/
+│   │   │   ├── AuthApplication.java           # Entry point
+│   │   │   ├── config/
+│   │   │   │   ├── SecurityConfig.java        # Spring Security filter chain
+│   │   │   │   ├── JwtAuthenticationFilter.java  # JWT extraction + validation
+│   │   │   │   ├── JwtConfig.java             # JWT secret + expiration config
+│   │   │   │   ├── DataSourceConfig.java      # Railway DATABASE_URL parser
+│   │   │   │   ├── ApplicationConfig.java     # Beans: PasswordEncoder, AuthManager
+│   │   │   │   └── GlobalExceptionHandler.java
+│   │   │   ├── controller/
+│   │   │   │   ├── AuthController.java        # POST /register /login /refresh /logout
+│   │   │   │   └── UserController.java        # GET /users (admin)
+│   │   │   ├── service/
+│   │   │   │   ├── AuthService.java           # Register, login, refresh, logout logic
+│   │   │   │   └── JwtService.java            # Token generation, validation, claims
+│   │   │   ├── model/
+│   │   │   │   ├── User.java                  # JPA entity for users table
+│   │   │   │   ├── Role.java                  # Enum: USER, MANAGER, ADMIN
+│   │   │   │   ├── request/                   # DTOs: Login, Register, RefreshToken
+│   │   │   │   └── response/                  # DTOs: AuthResponse, UserResponse
+│   │   │   └── repository/
+│   │   │       └── UserRepository.java
+│   │   ├── Dockerfile                         # Multi-stage Maven build
+│   │   └── pom.xml
+│   │
+│   ├── customer-service/               # 📇 CRM (Spring Boot)
+│   │   ├── src/main/java/com/atlasai/customer/
+│   │   │   ├── CustomerApplication.java
+│   │   │   ├── config/
+│   │   │   │   ├── SecurityConfig.java        # JWT-filtered endpoints
+│   │   │   │   ├── JwtAuthFilter.java         # HMAC JWT parser
+│   │   │   │   ├── DataSourceConfig.java      # Railway DATABASE_URL parser
+│   │   │   │   └── GlobalExceptionHandler.java  # 8 typed exception handlers
+│   │   │   ├── controller/
+│   │   │   │   ├── CustomerController.java    # Full CRUD + search + count
+│   │   │   │   └── OpportunityController.java  # Full CRUD + by-customer + count
+│   │   │   ├── service/
+│   │   │   │   ├── CustomerService.java       # CRUD + paginated search
+│   │   │   │   └── OpportunityService.java     # CRUD + paginated search
+│   │   │   ├── repository/
+│   │   │   │   ├── CustomerRepository.java     # Custom JPQL search queries
+│   │   │   │   └── OpportunityRepository.java   # Custom JPQL search queries
+│   │   │   └── model/
+│   │   │       ├── entity/                    # Customer.java, Opportunity.java
+│   │   │       ├── enums/                     # CustomerStatus, OpportunityStage
+│   │   │       ├── request/                   # DTOs: CustomerRequest, OpportunityRequest
+│   │   │       └── response/                  # DTOs: CustomerResponse, OpportunityResponse
+│   │   ├── Dockerfile
+│   │   └── pom.xml
+│   │
+│   ├── workflow-service/               # 🔄 Workflow orchestration (scaffolded)
+│   ├── task-service/                   # 📋 Task management (scaffolded)
+│   ├── notification-service/           # 📧 Email & calendar (scaffolded)
+│   ├── search-service/                 # 🔎 Vector search (scaffolded)
+│   │
+│   └── ai-agent-service/              # 🤖 Python AI agents
+│       ├── agents/
+│       │   ├── orchestrator.py         # Planner + step executor
+│       │   ├── crm_agent.py            # Customer search/update
+│       │   ├── email_agent.py          # Draft & send emails
+│       │   └── calendar_agent.py       # Schedule meetings
+│       ├── tools/
+│       │   ├── crm_tools.py            # CRM API wrappers
+│       │   ├── email_tools.py          # Email send wrappers
+│       │   └── calendar_tools.py       # Calendar API wrappers
+│       ├── vectordb/
+│       │   └── pgvector_client.py      # Vector storage client
+│       ├── app.py                      # FastAPI entry point
+│       ├── config.py                   # Environment config
+│       └── requirements.txt
+│
+├── frontend/                           # 🖥 React SPA
+│   ├── src/
+│   │   ├── main.tsx                    # Entry point
+│   │   ├── App.tsx                     # Routes, layouts
+│   │   ├── components/
+│   │   │   ├── ProtectedRoute.tsx      # Auth guard with redirect
+│   │   │   └── FounderModal.tsx        # Founder info modal
+│   │   ├── layouts/
+│   │   │   ├── AppLayout.tsx           # Sidebar + topbar + content
+│   │   │   └── PublicLayout.tsx        # Centered auth layout
+│   │   ├── pages/
+│   │   │   ├── auth/           (4 pages)
+│   │   │   ├── dashboard/      (1 page)
+│   │   │   ├── customers/      (3 pages)
+│   │   │   ├── opportunities/  (3 pages)
+│   │   │   ├── tasks/          (3 pages)
+│   │   │   ├── workflows/      (4 pages)
+│   │   │   ├── settings/       (4 pages)
+│   │   │   ├── admin/          (8 pages)
+│   │   │   ├── analytics/      (4 pages)
+│   │   │   ├── help/           (4 pages)
+│   │   │   └── errors/         (5 pages)
+│   │   ├── hooks/
+│   │   │   ├── useCustomers.ts          # Paginated customer data
+│   │   │   ├── useOpportunities.ts      # Paginated opportunity data
+│   │   │   └── useDashboard.ts          # Dashboard metrics
+│   │   ├── services/
+│   │   │   ├── api.ts                   # Axios instance + JWT interceptor
+│   │   │   ├── customerService.ts       # Customer API calls
+│   │   │   ├── opportunityService.ts    # Opportunity API calls
+│   │   │   └── mockData.ts             # Development mock data
+│   │   ├── stores/
+│   │   │   ├── authStore.ts            # Zustand: JWT tokens, user state
+│   │   │   └── uiStore.ts              # Zustand: sidebar, theme
+│   │   └── styles/
+│   │       ├── globals.css             # Global styles
+│   │       └── theme.ts               # MUI theme customization
+│   ├── nginx.conf                      # Production Nginx config
+│   ├── Dockerfile                      # Multi-stage build
+│   └── package.json
+│
+├── infra/
+│   ├── docker-compose.yml              # Local dev: PostgreSQL, Redis, Kafka, pgAdmin
+│   └── init-scripts/                   # DB initialization scripts
+│
+├── docs/                               # Documentation & research
+├── plan.md                             # Implementation plan & status
+└── .github/workflows/ci.yml           # CI pipeline (7 build jobs)
+```
 
 ---
 
-## 🧩 Agent Architecture
+## 🔬 Backend Deep Dive
 
-AtlasAI follows **Salesforce Agentforce** patterns with a clear agent taxonomy:
+### 🔐 Auth Service
+
+The authentication service handles user registration, login, and JWT management.
+
+#### Security Architecture
+
+```
+Request → Nginx → /api/auth/* → Auth Service (8081)
+                                  │
+                                  ├── JwtAuthenticationFilter (once per request)
+                                  │   ├── Extracts "Bearer <token>" from Authorization header
+                                  │   ├── Parses JWT via JJWT 0.12.6 (HMAC-SHA256)
+                                  │   ├── Validates: signature, expiration, user exists
+                                  │   ├── On success: sets SecurityContextHolder
+                                  │   └── On failure: logs WARN, clears context, continues chain
+                                  │
+                                  └── SecurityConfig
+                                      ├── /api/auth/register, /login, /refresh → permitAll()
+                                      ├── /api/users/** → ADMIN only
+                                      ├── /api/** → authenticated()
+                                      └── Stateless sessions (no HttpSession)
+```
+
+**Key Implementation Details:**
+
+- **JWT Token Format:** HMAC-SHA256 signed with `Keys.hmacShaKeyFor()` using a configurable secret from `JWT_SECRET` env var
+- **Token Claims:** `sub` (email), `role` (USER/MANAGER/ADMIN), `userId` (UUID), `iat`, `exp`
+- **Refresh Tokens:** Separate token with `type: "refresh"` claim, stored as SHA-256 hash for revocation support
+- **Password Storage:** BCrypt with Spring Security's `PasswordEncoder`
+- **Filter Chain Continuation:** Even invalid JWT tokens don't block the request — the filter logs a warning, clears the security context, and continues the filter chain. Public endpoints still work.
+
+```java
+// JwtAuthenticationFilter.doFilterInternal() — core JWT validation
+final String jwt = authHeader.substring(7);
+final String userEmail = jwtService.extractEmail(jwt);
+
+if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+    UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
+    if (jwtService.isTokenValid(jwt, userDetails)) {
+        UsernamePasswordAuthenticationToken authToken = 
+            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+    }
+}
+// On any exception: log.warn() + SecurityContextHolder.clearContext() + filterChain.doFilter()
+```
+
+```java
+// JwtService — token generation with HMAC-SHA256
+private SecretKey getSigningKey() {
+    return Keys.hmacShaKeyFor(jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
+}
+
+public String generateAccessToken(User user) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put("role", user.getRole().name());
+    claims.put("email", user.getEmail());
+    claims.put("userId", user.getId().toString());
+    return buildToken(claims, user.getEmail(), jwtConfig.getExpirationMs());
+}
+```
+
+#### Endpoints
+
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `POST` | `/api/auth/register` | ❌ | Register new user (name, email, password) |
+| `POST` | `/api/auth/login` | ❌ | Login, returns access + refresh tokens |
+| `POST` | `/api/auth/refresh` | ❌ | Exchange refresh token for new tokens |
+| `POST` | `/api/auth/logout` | ✅ Revoke refresh token |
+| `GET` | `/api/auth/me` | ✅ | Get current user profile |
+| `GET` | `/api/users` | ✅ ADMIN | List all users |
+| `GET` | `/api/users/{id}` | ✅ ADMIN | Get user by ID |
+
+---
+
+### 📇 Customer/CRM Service
+
+The CRM service provides full CRUD operations for customers and sales opportunities with pagination and filtering.
+
+#### JWT Validation Pattern
+
+Unlike the auth service (which uses Spring Security's `UserDetailsService`), the customer service validates JWT tokens **independently** using the same HMAC secret:
+
+```java
+// JwtAuthFilter.doFilterInternal()
+SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+
+Claims claims = Jwts.parser()
+    .verifyWith(key)
+    .build()
+    .parseSignedClaims(token)
+    .getPayload();
+
+// Extract claims
+String email = claims.getSubject();
+String role = claims.get("role", String.class);
+String userId = claims.get("userId", String.class);
+
+// Create auth token
+List<SimpleGrantedAuthority> authorities = role != null
+    ? List.of(new SimpleGrantedAuthority(role))
+    : List.of();
+UsernamePasswordAuthenticationToken authToken =
+    new UsernamePasswordAuthenticationToken(email, userId, authorities);
+SecurityContextHolder.getContext().setAuthentication(authToken);
+```
+
+This pattern allows each microservice to validate tokens **without calling the auth service** — enabling independent scaling and zero-latency validation.
+
+#### Pagination Architecture
+
+All list endpoints support standard pagination parameters:
+
+| Parameter | Default | Example |
+|-----------|---------|---------|
+| `page` | 0 | `?page=0` |
+| `size` | 50 | `?size=20` |
+| `sort` | updatedAt | `?sort=name` |
+| `direction` | desc | `?direction=asc` |
+
+```java
+// CustomerController — paginated endpoint
+@GetMapping
+public ResponseEntity<Page<CustomerResponse>> getAllCustomers(
+        @RequestParam(required = false) String search,
+        @RequestParam(required = false) String industry,
+        @RequestParam(required = false) String location,
+        @RequestParam(required = false) String status,
+        @RequestParam(required = false) Integer daysSinceContact,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "50") int size,
+        @RequestParam(defaultValue = "updatedAt") String sort,
+        @RequestParam(defaultValue = "desc") String direction) {
+
+    Sort sortObj = direction.equalsIgnoreCase("asc")
+            ? Sort.by(sort).ascending()
+            : Sort.by(sort).descending();
+    Pageable pageable = PageRequest.of(page, size, sortObj);
+
+    Page<CustomerResponse> customers = customerService.searchCustomers(
+            search, industry, location, status, daysSinceContact, pageable);
+    return ResponseEntity.ok(customers);
+}
+```
+
+#### Exception Handling
+
+A comprehensive `GlobalExceptionHandler` with 8 typed handlers provides consistent error responses across all endpoints:
+
+| Exception | HTTP Status | Error Example |
+|-----------|-------------|---------------|
+| `IllegalArgumentException` | 400 | `"Customer not found: <id>"` |
+| `MethodArgumentNotValidException` | 400 | `{"fieldErrors": {"email": "must be a well-formed email address"}}` |
+| `AccessDeniedException` | 403 | `"Access denied. You do not have permission."` |
+| `JwtException` | 401 | `"Invalid or expired authentication token"` |
+| `DataIntegrityViolationException` | 409 | `"Data integrity violation"` |
+| `HttpMessageNotReadableException` | 400 | `"Malformed request body"` |
+| `MissingServletRequestParameterException` | 400 | `"Required parameter 'search' is missing"` |
+| `MethodArgumentTypeMismatchException` | 400 | `"Invalid value for parameter 'page'"` |
+| Generic `Exception` | 500 | Logged with full stack trace |
+
+#### Endpoints
+
+**Customers:**
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/customers` | List customers (paginated, filterable) |
+| `GET` | `/api/customers/{id}` | Get customer by ID |
+| `POST` | `/api/customers` | Create customer |
+| `PUT` | `/api/customers/{id}` | Update customer |
+| `DELETE` | `/api/customers/{id}` | Delete customer |
+| `GET` | `/api/customers/count` | Total customer count |
+
+**Opportunities:**
+
+| Method | Path | Description |
+|--------|------|-------------|
+| `GET` | `/api/opportunities` | List opportunities (paginated, filterable) |
+| `GET` | `/api/opportunities/{id}` | Get opportunity by ID |
+| `GET` | `/api/opportunities/by-customer/{customerId}` | Get opportunities by customer |
+| `POST` | `/api/opportunities` | Create opportunity |
+| `PUT` | `/api/opportunities/{id}` | Update opportunity |
+| `DELETE` | `/api/opportunities/{id}` | Delete opportunity |
+| `GET` | `/api/opportunities/count` | Total opportunity count |
+
+#### Database Schema
+
+```sql
+-- Users (auth-service)
+CREATE TABLE users (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    role VARCHAR(20) NOT NULL DEFAULT 'ROLE_USER',
+    refresh_token_hash VARCHAR(255),
+    created_at TIMESTAMP NOT NULL
+);
+
+-- Customers (customer-service)
+CREATE TABLE customers (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    company VARCHAR(255) NOT NULL,
+    industry VARCHAR(255),
+    location VARCHAR(255),
+    email VARCHAR(255),
+    phone VARCHAR(255),
+    contact_person VARCHAR(255),
+    last_contacted TIMESTAMP,
+    status VARCHAR(20) DEFAULT 'LEAD',
+    tags TEXT,
+    notes TEXT,
+    website VARCHAR(255),
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+
+-- Opportunities (customer-service)
+CREATE TABLE opportunities (
+    id UUID PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    customer_id UUID NOT NULL,
+    customer_name VARCHAR(255),
+    stage VARCHAR(20) NOT NULL DEFAULT 'PROSPECT',
+    value NUMERIC(15,2),
+    probability INT NOT NULL DEFAULT 0,
+    close_date DATE,
+    assigned_to VARCHAR(255),
+    description TEXT,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL
+);
+```
+
+---
+
+### 🤖 AI Agent Service (Scaffolded)
+
+The AI agent service is built in **Python with FastAPI** and implements an **orchestrator pattern** for autonomous sales workflow execution. It's fully coded and ready to deploy — it just needs an **OpenAI API key**.
+
+#### Agent Architecture
 
 ```
 ┌──────────────────────────────────────────────────────────┐
@@ -448,128 +581,287 @@ AtlasAI follows **Salesforce Agentforce** patterns with a clear agent taxonomy:
    └──────────┘   └──────────┘  └──────────┘  └──────────┘
 ```
 
-### Agent Workflow
-
-1. **📝 Goal Definition** — Orchestrator receives goal + context
-2. **📋 Planning** — LLM generates step-by-step plan with tool selections
-3. **⚡ Execution** — Calls tools via OpenAI function-calling (structured JSON)
-4. **👁️ Monitoring** — Updates progress, consults guardrails on uncertainties
-5. **✅ Completion** — Aggregates results, marks workflow done
-
-### Sample Tool Call (JSON)
-
-```json
-[
-  {
-    "id": "call_67890abc",
-    "type": "function",
-    "function": {
-      "name": "send_email",
-      "arguments": "{\"to\":[\"alice@xyz.com\",\"bob@xyz.com\"],\"subject\":\"Follow-up\",\"body\":\"Hi, just checking in...\"}"
-    }
-  }
-]
+```python
+# orchestrator.py — core execution pipeline
+class OrchestratorAgent:
+    async def execute(self, workflow_id: str, goal: str, parameters: dict) -> dict:
+        plan = await self._create_plan(goal, parameters)       # LLM generates steps
+        results = await self._execute_plan(workflow_id, plan)   # Executes each step
+        report = await self._create_report(results)             # Aggregates results
+        return {"workflow_id": workflow_id, "status": "COMPLETED", "plan": plan, "result": report}
 ```
 
-### Prompt Templates
-
-| Agent | Prompt Purpose |
-|-------|---------------|
-| **Planner** | "Given goal *{goal}* and access to CRM + Email APIs, outline steps to complete this objective." |
-| **CRM Agent** | "Find customers in *{industry}* sector in *{location}* not contacted in {days} days. Return JSON array." |
-| **Email Agent** | "Generate personalized follow-up for {name} at {company}. Under 100 words. Professional tone." |
+```python
+# app.py — FastAPI entry point
+@app.post("/api/agent/start")
+async def start_workflow(request: WorkflowRequest):
+    orchestrator = OrchestratorAgent()
+    result = await orchestrator.execute(
+        workflow_id=request.workflow_id,
+        goal=request.goal,
+        parameters=request.parameters,
+    )
+    return result
+```
 
 ---
 
-## 📁 Project Structure
+## 🖥 Frontend Deep Dive
+
+The frontend is a **40+ page Single Page Application** built with React 18 and TypeScript, using Vite for blazing-fast builds and Material UI 5 for a professional design system.
+
+### Architecture
 
 ```
-atlasai/
-├── services/                          # Backend microservices
-│   ├── auth-service/                  # 🔐 OAuth2/JWT authentication
-│   │   ├── src/main/java/...
-│   │   ├── src/test/java/...
-│   │   ├── Dockerfile
-│   │   └── pom.xml
-│   │
-│   ├── customer-service/              # 📇 CRM (customers, opportunities)
-│   │   ├── src/main/java/...
-│   │   ├── src/test/java/...
-│   │   ├── Dockerfile
-│   │   └── pom.xml
-│   │
-│   ├── workflow-service/              # 🔄 Workflow orchestrator
-│   │   ├── src/main/java/...
-│   │   ├── src/test/java/...
-│   │   ├── Dockerfile
-│   │   └── pom.xml
-│   │
-│   ├── task-service/                  # 📋 Task CRUD management
-│   │   ├── src/main/java/...
-│   │   ├── src/test/java/...
-│   │   ├── Dockerfile
-│   │   └── pom.xml
-│   │
-│   ├── notification-service/          # 📧 Email & calendar integration
-│   │   ├── src/main/java/...
-│   │   ├── src/test/java/...
-│   │   ├── Dockerfile
-│   │   └── pom.xml
-│   │
-│   ├── search-service/                # 🔎 Vector search & RAG
-│   │   ├── src/main/java/...
-│   │   ├── src/test/java/...
-│   │   ├── Dockerfile
-│   │   └── pom.xml
-│   │
-│   └── ai-agent-service/             # 🤖 Python agent service
-│       ├── agents/                    # Agent definitions
-│       │   ├── orchestrator.py
-│       │   ├── crm_agent.py
-│       │   ├── email_agent.py
-│       │   └── calendar_agent.py
-│       ├── tools/                     # Tool implementations
-│       ├── vectordb/                  # pgvector integration
-│       ├── requirements.txt
-│       ├── Dockerfile
-│       └── app.py
+App.tsx
+├── PublicLayout.tsx
+│   ├── LoginPage.tsx
+│   ├── ForgotPasswordPage.tsx
+│   ├── ResetPasswordPage.tsx
+│   └── FounderPage.tsx (3-column premium dashboard)
 │
-├── frontend/                          # 🖥 React/TypeScript SPA
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   │   ├── LoginPage.tsx
-│   │   │   ├── Dashboard.tsx
-│   │   │   ├── CreateWorkflow.tsx
-│   │   │   └── AdminPanel.tsx
-│   │   ├── contexts/
-│   │   ├── services/
-│   │   └── App.tsx
-│   ├── package.json
-│   ├── Dockerfile
-│   └── tsconfig.json
+├── ProtectedRoute.tsx (auth guard)
 │
-├── infra/                             # Infrastructure configs
-│   ├── docker-compose.yml             # Local dev orchestration
-│   ├── k8s/                           # Kubernetes manifests
-│   │   ├── deployments/
-│   │   ├── services/
-│   │   └── ingress.yaml
-│   └── helm/                          # Helm charts
-│
-├── docs/                              # Documentation
-│   ├── diagrams/                      # Architecture diagrams
-│   ├── api-specs/                     # OpenAPI/Swagger specs
-│   └── prd.md                         # Product requirements doc
-│
-├── .github/                           # GitHub configurations
-│   └── workflows/
-│       └── ci.yml                     # CI/CD pipeline
-│
-├── deep-research-report.md            # 📄 Comprehensive research & design doc
-├── README.md                          # 📘 This file!
-└── LICENSE
+└── AppLayout.tsx (sidebar + top bar)
+    ├── DashboardPage.tsx           # Real customer/deal counts
+    ├── Customers/                  # List, Detail, Form
+    ├── Opportunities/              # List, Detail, Form
+    ├── Tasks/                      # List, Detail, Board
+    ├── Workflows/                  # List, Create, Detail, Templates
+    ├── Settings/                   # Profile, Appearance, Notifications, API Keys
+    ├── Admin/                      # Users, Roles, API Keys, Audit Log, etc.
+    ├── Analytics/                  # Agents, Sales, Custom Reports
+    ├── Help/                       # Docs, API Reference, Changelog, Contact
+    └── Errors/                     # 404, 403, 500, Maintenance, Offline
 ```
+
+### State Management & API Layer
+
+```typescript
+// stores/authStore.ts — Zustand-based auth state
+interface AuthState {
+  accessToken: string | null;
+  refreshToken: string | null;
+  user: User | null;
+  isAuthenticated: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+```
+
+```typescript
+// services/api.ts — Axios interceptor with automatic JWT refresh
+api.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().accessToken;
+  if (token) config.headers.Authorization = `Bearer ${token}`;
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response?.status === 401 && !error.config._retry) {
+      error.config._retry = true;
+      await refreshTokens();  // Queues concurrent refresh requests
+      return api(error.config);  // Retries original request
+    }
+    return Promise.reject(error);
+  }
+);
+```
+
+### Paginated Data Hooks
+
+```typescript
+// hooks/useCustomers.ts
+export function useCustomers(page = 0, size = 50, sort = 'updatedAt', direction = 'desc') {
+  const [customers, setCustomers] = useState<Customer[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({ totalElements: 0, totalPages: 0 });
+
+  useEffect(() => {
+    customerService.getAll({ page, size, sort, direction })
+      .then(data => {
+        setCustomers(data.content);     // Spring Boot Page<T>.content
+        setPagination({
+          totalElements: data.totalElements,
+          totalPages: data.totalPages,
+        });
+      });
+  }, [page, size, sort, direction]);
+
+  return { customers, pagination, loading, error };
+}
+```
+
+---
+
+## 📡 API Reference
+
+### Authentication
+
+```
+POST /api/auth/register
+Body: { "name": "John", "email": "john@example.com", "password": "securepass" }
+Response: { "accessToken": "eyJ...", "refreshToken": "eyJ...", "tokenType": "Bearer",
+            "expiresIn": 3600, "userId": "uuid", "name": "John", "email": "john@example.com", "role": "ROLE_USER" }
+
+POST /api/auth/login
+Body: { "email": "john@example.com", "password": "securepass" }
+Response: { "accessToken": "eyJ...", "refreshToken": "eyJ...", ... }
+
+POST /api/auth/refresh
+Body: { "refreshToken": "eyJ..." }
+Response: { "accessToken": "eyJ...", "refreshToken": "eyJ...", ... }
+```
+
+### Customers
+
+```
+GET /api/customers?page=0&size=20&sort=name&direction=asc&search=acme&industry=Tech
+Authorization: Bearer <token>
+Response: {
+  "content": [{ "id": "uuid", "name": "Acme Corp", "company": "Acme Inc", ... }],
+  "totalElements": 42,
+  "totalPages": 3,
+  "number": 0,
+  "size": 20
+}
+
+POST /api/customers
+Authorization: Bearer <token>
+Body: { "name": "Acme Corp", "company": "Acme Inc", "industry": "Tech", "location": "Chennai" }
+Response: { "id": "uuid", ... } (201 Created)
+```
+
+### Opportunities
+
+```
+GET /api/opportunities?page=0&size=20&stage=CLOSED_WON&minValue=10000
+Authorization: Bearer <token>
+Response: { "content": [...], "totalElements": 15, ... }
+```
+
+---
+
+## 🐳 Infrastructure & DevOps
+
+### Docker Multi-Stage Build (Customer Service Example)
+
+```dockerfile
+# Stage 1: Build with Maven
+FROM maven:3.9-eclipse-temurin-21-alpine AS build
+WORKDIR /app
+COPY pom.xml ./
+RUN mvn dependency:go-offline -q || true     # Cache dependencies
+COPY src/ src/
+RUN mvn package -DskipTests -q               # Compile + package
+
+# Stage 2: Run with JRE (much smaller image)
+FROM eclipse-temurin:21-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/customer-service-*.jar app.jar
+EXPOSE 8082
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+### CI/CD Pipeline (GitHub Actions)
+
+```yaml
+# .github/workflows/ci.yml — 7 parallel build jobs
+jobs:
+  build-auth-service:      # ✅ Java 21 + Maven
+  build-customer-service:  # ✅ Java 21 + Maven
+  build-workflow-service:  # ✅ Java 21 + Maven
+  build-task-service:      # ✅ Java 21 + Maven
+  build-notification-service: # ✅ Java 21 + Maven
+  build-search-service:    # ✅ Java 21 + Maven
+  build-frontend:          # ✅ Node 18 + npm
+```
+
+Every push to `main` triggers all 7 builds in parallel. On success, Railway auto-deploys the changed services.
+
+### Nginx Configuration
+
+The frontend's Nginx acts as an API gateway, routing requests to the correct backend:
+
+```nginx
+# /api/auth/* → Auth Service
+location /api/auth {
+    proxy_pass https://agentic-workflow-automator-production.up.railway.app;
+    proxy_set_header Host agentic-workflow-automator-production.up.railway.app;
+}
+
+# /api/customers/* → Customer Service
+location /api/customers {
+    proxy_pass https://customer-service-production-0ff7.up.railway.app;
+    proxy_set_header Host customer-service-production-0ff7.up.railway.app;
+}
+
+# /api/opportunities/* → Customer Service
+location /api/opportunities {
+    proxy_pass https://customer-service-production-0ff7.up.railway.app;
+    proxy_set_header Host customer-service-production-0ff7.up.railway.app;
+}
+
+# SPA fallback — all other routes serve index.html
+location / {
+    try_files $uri $uri/ /index.html;
+}
+
+# Static assets with 1-year cache
+location /assets/ {
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+}
+```
+
+---
+
+## 🔍 Diagnosis & Debugging Highlights
+
+During development and deployment, several non-trivial issues were diagnosed and resolved through **systematic debugging**:
+
+### 1. JWT 403 Silent Failures
+
+**Symptom:** Customer service returned 403 Forbidden with no logs. Auth service's login worked fine.
+
+**Root Cause:** `JwtAuthFilter` caught all JWT exceptions silently (`catch (Exception e) { }`) — no logging at all. Debugging was impossible.
+
+**Fix:** Added SLF4J `log.warn()` with method, URI, and error message for every JWT failure. Also ensured the filter **always continues the filter chain** so public endpoints work even with invalid tokens in headers.
+
+### 2. PostgreSQL `bytea` Column Type
+
+**Symptom:** Customer/opportunity list endpoints returned 500 with `ERROR: function lower(bytea) does not exist`.
+
+**Root Cause:** The database columns were created as `bytea` (binary) instead of `varchar` for string fields. PostgreSQL's `LOWER()` function doesn't work on binary columns.
+
+**Diagnosis:** Railway logs from `GlobalExceptionHandler` revealed the exact SQL error. The stack trace showed the query and the `bytea` type reference.
+
+**Solution:** Added `@Column(columnDefinition = "VARCHAR(255)")` to all entity string fields and implemented a `findAll(Pageable)` fallback path when no search filters are used, avoiding the problematic JPQL query.
+
+### 3. Railway `DATABASE_URL` Parsing
+
+**Symptom:** Services crashed on Railway with connection refused to `localhost:5432`.
+
+**Root Cause:** Railway provides `DATABASE_URL` in `postgresql://user:pass@host:port/db` format, but Spring Boot's JDBC driver expects `jdbc:postgresql://host:port/db`.
+
+**Fix:** Created `DataSourceConfig.java` that checks for `DATABASE_URL`, parses the URI, and builds a proper JDBC DataSource. Falls back to `application.yml` defaults for local development.
+
+### 4. Redis/Kafka Dependencies on Railway
+
+**Symptom:** Services crashed at startup with Redis connection refused.
+
+**Root Cause:** `pom.xml` included `spring-boot-starter-data-redis` and `spring-kafka`, which auto-configure at startup and try to connect to `localhost:6379` and `localhost:9092` — neither exists on Railway.
+
+**Fix:** Removed Redis and Kafka dependencies from production builds. Only `spring-kafka-test` remains for unit tests.
+
+### 5. Nginx Trailing Slash Routing
+
+**Symptom:** `GET /api/customers` returned 404 through Nginx, but worked when hitting the backend directly.
+
+**Root Cause:** `location /api/customers/` (with trailing slash) doesn't match `GET /api/customers` (without trailing slash).
+
+**Fix:** Removed trailing slashes from all Nginx location blocks.
 
 ---
 
@@ -577,253 +869,119 @@ atlasai/
 
 ### Prerequisites
 
-| Requirement | Version | Purpose |
-|-------------|---------|---------|
-| **Java Development Kit** | 21 (LTS) | Run Spring Boot services |
-| **Node.js** | 18.x+ | Build React frontend |
-| **Docker** | 24.x+ | Container runtime |
-| **Docker Compose** | 2.x+ | Local service orchestration |
-| **Python** | 3.11+ | AI agent service |
-| **Maven / Gradle** | 3.9+ / 8.x | Build backend services |
+| Requirement | Version |
+|-------------|---------|
+| Java Development Kit | 21 (LTS) |
+| Node.js | 18.x+ |
+| Docker | 24.x+ |
+| Docker Compose | 2.x+ |
+| Python | 3.11+ (for AI agent service) |
+| Maven | 3.9+ |
 
-### Local Development Setup
-
-**1. Clone the repository**
+### Local Development
 
 ```bash
-git clone https://github.com/your-org/atlasai.git
-cd atlasai
-```
+# 1. Clone the repository
+git clone https://github.com/barath-project-work/Agentic-Workflow-Automator.git
+cd Agentic-Workflow-Automator
 
-**2. Start infrastructure dependencies**
-
-```bash
-# Start PostgreSQL, Redis, Kafka, and Zookeeper
+# 2. Start infrastructure (PostgreSQL, Redis, Kafka)
 docker-compose -f infra/docker-compose.yml up -d
 
-# Verify all services are running
-docker-compose -f infra/docker-compose.yml ps
-```
+# 3. Start auth service
+cd services/auth-service
+./mvnw spring-boot:run
 
-**3. Set up environment variables**
+# 4. Start customer service (in another terminal)
+cd services/customer-service
+./mvnw spring-boot:run
 
-```bash
-# Copy example env files (adjust as needed)
-cp services/auth-service/.env.example services/auth-service/.env
-# Edit with your credentials (JWT secret, DB passwords, API keys)
-```
-
-**4. Build & run backend services**
-
-```bash
-# Build all services
-cd services
-mvn clean package -DskipTests
-
-# Run each service (in separate terminals or run all via docker-compose)
-cd auth-service && mvn spring-boot:run
-cd customer-service && mvn spring-boot:run
-cd workflow-service && mvn spring-boot:run
-# ... etc.
-```
-
-**5. Set up AI agent service**
-
-```bash
-cd services/ai-agent-service
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Set OpenAI API key
-export OPENAI_API_KEY="sk-..."
-python app.py
-```
-
-**6. Start the frontend**
-
-```bash
+# 5. Start frontend (in another terminal)
 cd frontend
 npm install
 npm run dev
+
+# 6. Open http://localhost:5173 in your browser
 ```
 
-**7. Open the application**
-
-Navigate to **[http://localhost:3000](http://localhost:3000)** and log in with your credentials.
-
-### Running All Services with Docker Compose
-
-For a fully integrated local experience:
+### Testing the APIs
 
 ```bash
-docker-compose -f infra/docker-compose.yml --profile all up -d
-```
+# Register a user
+curl -X POST http://localhost:8081/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test User","email":"test@test.com","password":"password123"}'
 
-This will start:
-- ✅ PostgreSQL + pgvector
-- ✅ Redis
-- ✅ Apache Kafka + Zookeeper
-- ✅ All Spring Boot microservices
-- ✅ AI Agent Service (Python)
-- ✅ React Frontend
-- ✅ Prometheus + Grafana (observability)
+# Login
+curl -X POST http://localhost:8081/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@test.com","password":"password123"}'
 
----
+# Extract the accessToken and use it:
+TOKEN="eyJ..."
 
-## 📡 API Overview
+# Create a customer
+curl -X POST http://localhost:8082/api/customers \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Acme Corp","company":"Acme Inc","industry":"Tech","location":"Chennai"}'
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
-| `POST` | `/api/login` | Authenticate & get JWT | ❌ |
-| `POST` | `/api/refresh-token` | Refresh JWT | ✅ |
-| `GET` | `/api/users` | List users (admin) | ✅ Admin |
-| `GET` | `/api/customers` | List customers (w/ filters) | ✅ |
-| `GET` | `/api/customers/{id}` | Get customer details | ✅ |
-| `GET` | `/api/customers/search` | Search by industry, location, days | ✅ |
-| `GET` | `/api/opportunities` | List opportunities | ✅ |
-| `POST` | `/api/workflow` | Start new AI workflow | ✅ |
-| `GET` | `/api/workflow/{id}` | Get workflow status/result | ✅ |
-| `GET` | `/api/tasks` | List user tasks | ✅ |
-| `POST` | `/api/tasks/{id}/complete` | Mark task complete | ✅ |
-| `GET` | `/api/analytics/metrics` | Get sales metrics | ✅ Manager |
-
-All API responses are **JSON**. Include JWT in header: `Authorization: Bearer <token>`.
-
----
-
-## 📅 Development Roadmap (8 Weeks)
-
-```mermaid
-gantt
-    title AtlasAI Development Roadmap
-    dateFormat  YYYY-MM-DD
-    axisFormat  %b %d
-    
-    section Week 1-2: Foundation
-    Design & Architecture Docs        :done, w1, 2026-07-07, 7d
-    CI/CD Pipeline Setup              :done, w1, 2026-07-07, 3d
-    Auth Service (Login, JWT, RBAC)   :done, w2, 2026-07-14, 5d
-    Customer/CRM Service              :done, w2, 2026-07-14, 5d
-    DB Schema & Migrations            :done, w2, 2026-07-14, 3d
-    
-    section Week 3-4: Core Workflows
-    Workflow Service (REST API)       :active, w3, 2026-07-21, 5d
-    Task Service                      :active, w3, 2026-07-21, 4d
-    Kafka Integration (topics, events): w3, 2026-07-21, 5d
-    AI Agent Prototype (Python)       : w4, 2026-07-28, 5d
-    Basic Orchestrator (mock steps)   : w4, 2026-07-28, 3d
-    
-    section Week 5-6: AI & Integration
-    CRM Agent Tools (function calling): w5, 2026-08-04, 4d
-    Email Agent Integration           : w5, 2026-08-04, 3d
-    Calendar Agent (stub)             : w5, 2026-08-04, 2d
-    End-to-End Workflow DEMO          : w5, 2026-08-04, 5d
-    React Frontend (Login, Dashboard) : w6, 2026-08-11, 5d
-    Frontend Workflow UI              : w6, 2026-08-11, 5d
-    
-    section Week 7-8: Hardening & Polish
-    Integration Tests (Testcontainers): w7, 2026-08-18, 5d
-    Redis Caching & Performance       : w7, 2026-08-18, 3d
-    Observability (Prometheus/Grafana): w7, 2026-08-18, 4d
-    Security Review & RBAC            : w8, 2026-08-25, 3d
-    Documentation & API Specs         : w8, 2026-08-25, 5d
-    Final Demo Preparation            : w8, 2026-08-25, 5d
-```
-
-| Week | Focus | Key Deliverables |
-|------|-------|------------------|
-| **1** | Design & Setup | PRD, architecture docs, repo structure, CI/CD |
-| **2** | Core Data Services | Auth service, Customer/CRM service, DB schema |
-| **3** | Workflow Engine | Workflow service, Task service, Kafka setup |
-| **4** | AI Agent Prototype | Python agent service, basic orchestrator w/ mock steps |
-| **5** | Tool Agents | CRM search, email, calendar integrations; end-to-end demo |
-| **6** | Frontend | React SPA: login, dashboard, workflow creation |
-| **7** | Testing & Optimization | Integration tests, caching, observability dashboards |
-| **8** | Finalize | Security audit, documentation, deployment readiness |
-
----
-
-## 🔒 Security & Compliance
-
-| Measure | Implementation |
-|---------|---------------|
-| **Authentication** | OAuth2 with JWT (Spring Security Resource Server) |
-| **Authorization** | Role-Based Access Control (USER, MANAGER, ADMIN) |
-| **Data in Transit** | TLS/HTTPS on all endpoints (K8s Ingress with certs) |
-| **Data at Rest** | PostgreSQL encryption (pgcrypto), disk-level encryption |
-| **Secrets Management** | Kubernetes Secrets / HashiCorp Vault / AWS Secrets Manager |
-| **Input Validation** | Sanitized inputs, AI content filters, guardrails |
-| **Audit Trail** | Append-only audit log for every agent action |
-| **Rate Limiting** | API rate limiting per user/role (LLM cost control) |
-| **Data Privacy** | PII access restricted to CRM service only |
-
----
-
-## 🧪 Testing Strategy
-
-| Level | Tools | Scope |
-|-------|-------|-------|
-| **Unit Tests** | JUnit 5, Mockito, Jest | Service logic, repositories, components |
-| **Integration Tests** | Spring Boot Test, Testcontainers | Kafka flows, DB interactions, API contracts |
-| **API Tests** | REST Assured, MockMvc | Endpoint validation, JSON schemas |
-| **Frontend Tests** | Jest, React Testing Library | Component rendering, user interactions |
-| **E2E Tests** | Cypress / Playwright | Full user workflows (login → create workflow → view results) |
-
-### Testcontainers Example
-
-```java
-@Container
-public static KafkaContainer kafka = new KafkaContainer(
-    "confluentinc/cp-kafka:7.2.1"
-);
-
-@BeforeAll
-static void setup() {
-    System.setProperty("spring.kafka.bootstrap-servers", 
-        kafka.getBootstrapServers());
-}
-
-@Test
-void testKafkaFlow() {
-    // Produce → Consume → Verify
-}
+# List customers (paginated)
+curl "http://localhost:8082/api/customers?page=0&size=20&sort=name&direction=asc" \
+  -H "Authorization: Bearer $TOKEN"
 ```
 
 ---
 
-## 🤝 Contributing
+## 📦 Deployment to Railway
 
-We welcome contributions! Here's how you can help:
+Each service is deployed to Railway with the following configuration:
 
-1. **Fork** the repository
-2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
-3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
-4. **Push to the branch** (`git push origin feature/amazing-feature`)
-5. **Open a Pull Request**
+### Required Environment Variables
 
-### Development Guidelines
+| Service | Variables |
+|---------|-----------|
+| **Auth Service** | `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`, `JWT_SECRET` = (your secret) |
+| **Customer Service** | `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`, `JWT_SECRET` = (same secret) |
+| **Frontend** | None (static files served by Nginx) |
 
-- Follow existing code style and conventions
-- Write unit tests for all new functionality
-- Ensure all tests pass before submitting PRs
-- Update documentation for API changes
-- Use conventional commits (`feat:`, `fix:`, `docs:`, etc.)
+### Key Deployment Learnings
+
+1. **`JWT_SECRET` must be identical** across all services that validate JWT tokens
+2. **`DataSourceConfig.java`** is required for every service to parse Railway's `DATABASE_URL`
+3. **Remove Redis/Kafka dependencies** from `pom.xml` for Railway deployments
+4. **Target port** in Railway must match `server.port` in `application.yml`
+5. **First Maven build** takes 3-5 minutes (downloading all dependencies), subsequent builds are ~1-2 minutes
+
+---
+
+## 🧭 What's Next
+
+| Priority | Feature | Status |
+|----------|---------|--------|
+| 🔴 | Workflow Service — full orchestration engine | ⬜ Not started |
+| 🔴 | Task Service — task CRUD + board | ⬜ Not started |
+| 🔴 | Fix PostgreSQL `bytea` columns permanently via ALTER TABLE | ⬜ Not started |
+| 🟡 | Notification Service — email + calendar | ⬜ Not started |
+| 🟡 | Search Service — pgvector + RAG | ⬜ Not started |
+| 🟡 | Activate AI Agent Service with OpenAI API key | ⬜ Needs API key |
+| 🟢 | Mobile responsive UI for all pages | 🟡 Partial |
+| 🟢 | Analytics dashboards with real data | ⬜ Not started |
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ---
 
 <p align="center">
-  Built with ❤️ by the AtlasAI Team
+  Built with ❤️ using Java 21, Spring Boot 3, React 18, and TypeScript
   <br/>
   <i>Automating sales workflows, one agent at a time.</i>
 </p>
 
 <p align="center">
-  <a href="#-table-of-conditions">↑ Back to Top</a>
+  <a href="#-table-of-contents">↑ Back to Top</a>
 </p>
