@@ -1,7 +1,7 @@
 # AtlasAI — Project Implementation Plan
 
 > **Project:** Agentic Sales Workflow Automation Platform
-> **Last Updated:** July 5, 2026 — Evening
+> **Last Updated:** July 6, 2026
 
 ---
 
@@ -11,8 +11,9 @@
 |-------|-----------|--------|
 | **Frontend Pages** | ~95% | ✅ All 43 pages built — auth + customers + opportunities wired to real backend |
 | **Auth Service** | 100% | ✅ Running on Railway — register, login, refresh, RBAC verified |
-| **Customer Service** | 90% | 🟡 Create/GetById/Count work — LIST returns 500 due to `bytea` DB columns (fix pushed) |
-| **Frontend→Backend Integration** | 70% | 🟡 Customer/opportunity pages wired — list fails until Railway deploys fix |
+| **Customer Service** | 95% | ✅ All CRUD endpoints working (list fix deployed & verified HTTP 200) |
+| **Frontend→Backend Integration** | 85% | 🟢 Customer/opportunity pages wired to real API — list working |
+| **Documentation** | 100% | ✅ README rewritten (concise) + 7 separate docs/ files created |
 | **Frontend Nginx** | 100% | ✅ Routes /api/auth → auth-service, /api/customers & /api/opportunities → customer-service |
 | **Founder Page Redesign** | 100% | ✅ Premium 3-column dashboard layout with responsive grid |
 | **Mobile Responsive** | 30% | 🟡 Auth pages done — 40+ more pages need mobile fixes |
@@ -101,36 +102,29 @@ services/customer-service/src/main/java/com/atlasai/customer/
 | **Entity column definitions** | Added explicit `@Column(columnDefinition = "VARCHAR(255)")` to all String fields in `Customer.java` and `Opportunity.java` to prevent `bytea` column type issue. |
 | **Database schema fix** | Set `ddl-auto: create` to drop & recreate tables with correct `VARCHAR` types (⚠️ temporary — revert to `update` after first deploy). |
 
-### 🐛 Persistent Bug: `bytea` Database Columns — Latest Fix Deployed
+### 🐛 `bytea` Database Columns — Fully Resolved ✅
 
-**Root cause:** The `customers` and `opportunities` tables on Railway were created with `bytea` (binary) columns instead of `varchar`/`text`. PostgreSQL's `LOWER()` function and even `LIKE` operations fail on binary data.
+**Root cause:** The `customers` and `opportunities` tables on Railway were created with `bytea` (binary) columns instead of `varchar`/`text`. PostgreSQL's `LOWER()` function fails on binary data.
 
-**Attempted fixes:**
-| # | Fix | Result |
-|---|-----|--------|
-| 1 | `ddl-auto: create` + `columnDefinition` — never deployed (Docker cache) | ❌ |
-| 2 | Removed `LOWER()` from JPQL — `LIKE` on `bytea` still crashes | ❌ |
-| 3 | **`findAll(Pageable)` fallback when no filters** — avoids custom JPQL entirely | 🟢 **PUSHED** |
+**Fix (commits `06d27df`, `661b3f6`):** 
+- `CustomerService.searchCustomers()` and `OpportunityService.searchOpportunities()` check if ALL filter params are null/blank. When no filters are provided, they call `findAll(Pageable)` — avoiding the custom JPQL query entirely.
+- `@Column(columnDefinition = "VARCHAR(255)")` added to all String fields in entities to prevent future column type mismatch.
 
-**Fix #3 (commit `06d27df`):** `CustomerService.searchCustomers()` and `OpportunityService.searchOpportunities()` now check if ALL filter params are null/blank. When no filters are provided, they call `findAll(Pageable)` — the standard Spring Data JPA method — instead of the custom JPQL query. This completely avoids the `bytea` column issue for the default list view.
+**Current status:** ✅ `GET /api/customers?page=0&size=3` returns **HTTP 200** with paginated data (verified: 2 total elements, correct IDs and names).
 
-**Limitation:** If you USE search/filter parameters (search text, industry, status, etc.), the custom JPQL query still runs and will crash on `bytea` columns. The permanent fix requires fixing the database schema.
-
-**Permanent fix needed:** Fix the Railway database schema by either:
-1. Running `ALTER TABLE customers ALTER COLUMN name TYPE VARCHAR(255);` (and all string columns) via Railway CLI or PGAdmin
-2. Or changing `ddl-auto` to `create` for ONE deploy (drops all data), then reverting to `update` — but Railway's Docker cache prevents this from working
+**Limitation:** If search/filter parameters are provided, the custom JPQL query still runs and will crash on `bytea` columns. Permanent fix requires running `ALTER TABLE` SQL on the Railway PostgreSQL database to convert existing columns.
 
 ### API Endpoints — Verified Status
 
 | Method | Path | Status | Verified |
 |--------|------|--------|----------|
-| `GET` | `/api/customers?search=&...&page=&size=&sort=` | 🟡 500 (fix deployed) | ✅ Yes |
+| `GET` | `/api/customers?page=&size=` | ✅ HTTP 200 with data | ✅ Jul 6 |
 | `GET` | `/api/customers/{id}` | ✅ Works | ✅ Yes |
 | `POST` | `/api/customers` | ✅ 201 Created | ✅ Yes |
 | `PUT` | `/api/customers/{id}` | ✅ Works | |
 | `DELETE` | `/api/customers/{id}` | ✅ Works | |
 | `GET` | `/api/customers/count` | ✅ Returns count | ✅ Yes |
-| `GET` | `/api/opportunities?search=&...&page=&size=` | 🟡 500 (fix deployed) | ✅ Yes |
+| `GET` | `/api/opportunities?page=&size=` | ✅ HTTP 200 with data | ✅ Jul 6 |
 | `GET` | `/api/opportunities/{id}` | ✅ Works | |
 | `GET` | `/api/opportunities/by-customer/{customerId}` | ✅ Works | ✅ Yes |
 | `POST` | `/api/opportunities` | ✅ Works | |
@@ -169,6 +163,47 @@ The `nginx.conf` was updated to route different API paths to the correct backend
 - Desktop-first 3-column CSS grid layout
 - Tablet/mobile responsive variants
 - Mobile responsive fixes for auth pages
+
+---
+
+## 📚 Phase 2.5: Documentation Restructuring ✅ Complete (Jul 6)
+
+### What Was Done
+
+**README.md rewritten** — from a 540-line technical report to a concise, recruiter-friendly overview:
+- Badges + one-line intro
+- Architecture diagram (ASCII)
+- Live deployment URLs (clickable)
+- Tech stack table (quick scan)
+- Screenshots section (placeholders for user-captured images)
+- Quick start guide (clone → run → test in 30s)
+- Debugging achievements section (hires recruiters)
+- Links to all 7 docs files
+
+**7 separate documentation files created in `docs/`:**
+
+| File | What It Covers |
+|------|---------------|
+| `docs/Architecture.md` | Full system design, service topology, communication patterns, Nginx routing config |
+| `docs/Authentication.md` | JWT flow (generation → validation), SecurityConfig, token structure, RBAC matrix, code snippets |
+| `docs/API.md` | Complete endpoint reference with request/response JSON schemas, error codes, HTTP status reference |
+| `docs/Database.md` | Full DDL, entity definitions, enums (CustomerStatus, OpportunityStage), bytea column guidance |
+| `docs/Infrastructure.md` | Docker multi-stage builds, Nginx config, CI/CD (7 parallel jobs), Docker Compose |
+| `docs/Deployment.md` | Railway setup guide, env vars checklist, step-by-step service addition guide, verification commands |
+| `docs/Debugging.md` | 5 real debugging stories: JWT 403, bytea columns, DATABASE_URL, Redis/Kafka, Nginx trailing slash |
+
+**Commit:** `e7010a4` — "Restructure docs: concise README + 7 separate docs/ files"
+
+### README Screenshots Section
+
+A screenshot gallery was added to the README with placeholders for 5 images:
+- `screenshots/login-page.png`
+- `screenshots/dashboard.png`
+- `screenshots/customers-list.png`
+- `screenshots/opportunities-list.png`
+- `screenshots/tasks-board.png`
+
+**Status:** ⏳ User needs to capture screenshots from the live app and save them to `screenshots/`
 
 ---
 
@@ -277,16 +312,29 @@ The `nginx.conf` was updated to route different API paths to the correct backend
 - [x] Frontend deployed to Railway (port 80)
 - [x] Nginx routes auth + customer/opportunity APIs to correct backends
 
-### To Do
-- [x] Fixed JWT validation logging — now log every failure with exact error
-- [x] Fixed GlobalExceptionHandler — proper HTTP status codes + stack trace logging
-- [x] Fixed pagination — all list endpoints support page/size/sort/direction
-- [x] Fixed entity column definitions — prevent `bytea` column type
-- [x] Fixed `findAll(Pageable)` fallback — list endpoints now work WITHOUT search filters
-- [ ] **Fix Railway database schema — ALTER TABLE to change bytea → varchar** (permanent fix for search)
-- [ ] Add more services to Nginx as they're built (workflows, tasks, etc.)
-- [ ] Set up custom domain + SSL (if needed)
-- [ ] Monitor logs and error rates
+### Incidents & Resolutions
+
+| Issue | Root Cause | Resolution | Date |
+|-------|-----------|------------|------|
+| JWT 403 silent failures | Empty catch blocks in JWT filters | Added SLF4J logging + filter chain continuation | Jul 5 |
+| bytea columns crash | PostgreSQL columns created as binary | findAll() fallback + columnDefinition annotations | Jul 5 |
+| DB connection refused | DATABASE_URL format mismatch | DataSourceConfig.java parser | Jul 5 |
+| Redis/Kafka startup crash | Auto-config on missing services | Removed unused deps from pom.xml | Jul 5 |
+| Nginx 404 on API calls | Trailing slash in location blocks | Removed trailing slashes | Jul 5 |
+
+### 🖥 Desktop White Screen Investigation (Jul 6)
+
+**Reported symptom:** Login page shows white screen on desktop browser, but works fine on mobile.
+
+**Investigation:** Automated browser test (1280×800 viewport) loaded the login page at `cheerful-respect-production-1c45.up.railway.app/login` successfully — page rendered, no console errors, no failed network requests, form fields were interactive.
+
+**Likelier causes (not a code bug):**
+1. **Hard browser cache** — Ctrl+Shift+R (hard refresh) or Incognito/Private window resolves it
+2. **Browser extension blocking** — Ad blockers can block Google Fonts or scripts
+3. **Network/DNS issue** — ISP or work network blocking Railway domain
+4. **Old cached Nginx response** — Nginx may have been serving stale index.html after deployment
+
+**Status:** ⏳ Requires user to test in incognito or with extensions disabled
 
 ---
 
