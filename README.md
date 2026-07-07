@@ -77,6 +77,24 @@ A **microservices-based platform** that automates enterprise sales workflows thr
 
 ---
 
+## 🖥️ Screenshots
+
+<p align="center">
+  <img src="screenshots/1.png" alt="Login Page" width="45%">
+  <img src="screenshots/2.png" alt="Dashboard" width="45%">
+</p>
+
+<p align="center">
+  <img src="screenshots/3.png" alt="Customers List" width="45%">
+  <img src="screenshots/4.png" alt="Opportunities Pipeline" width="45%">
+</p>
+
+<p align="center">
+  <img src="screenshots/5.png" alt="Task Board" width="90%">
+</p>
+
+---
+
 ## 🌐 Live Deployments
 
 | Component | URL | Status |
