@@ -97,6 +97,11 @@ location /api/customers {
     proxy_pass https://customer-service-domain.up.railway.app;
     proxy_set_header Host customer-service-domain.up.railway.app;
 }
+
+location /api/workflows {
+    proxy_pass https://workflow-service-production.up.railway.app;
+    proxy_set_header Host workflow-service-production.up.railway.app;
+}
 ```
 
 **Critical:** `proxy_set_header Host` must match each service's **own** domain, not a shared value. This is how Railway routes requests to the correct container.
@@ -112,6 +117,7 @@ location /api/customers {
 | **Auth Service** | `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`, `JWT_SECRET` = (your secret) |
 | **Customer Service** | `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`, `JWT_SECRET` = (must match auth) |
 | **Frontend** | None (static files served by Nginx) |
+| **Workflow Service** | `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`, `JWT_SECRET` = (must match auth) |
 | **Future services** | Same pattern: `DATABASE_URL` + `JWT_SECRET` |
 
 ### Target Ports
@@ -120,6 +126,7 @@ location /api/customers {
 |---------|---------------|-------------------|
 | Auth | 8081 | 8081 |
 | Customer | 8082 | 8082 |
+| Workflow | 8083 | 8083 |
 | Frontend | Nginx :80 | 80 |
 
 ---

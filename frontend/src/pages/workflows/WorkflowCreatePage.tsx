@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, TextField, Button, Select, MenuItem, FormControl, InputLabel, Slider, Chip, Alert, CircularProgress, Grid } from '@mui/material';
 import { AutoAwesome, Rocket, LocationOn } from '@mui/icons-material';
-import { demoTemplates } from '../../services/mockData';
+import { useCreateWorkflow, useWorkflowTemplates } from '../../hooks/useWorkflows';
 
 export function WorkflowCreatePage() {
   const [goal, setGoal] = useState('');
   const [industry, setIndustry] = useState('');
   const [location, setLocation] = useState('');
   const [days, setDays] = useState(10);
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  const createMutation = useCreateWorkflow();
+  const { data: templates = [] } = useWorkflowTemplates();
 
   const suggestions = [
     'Follow up with healthcare leads in Chennai',
@@ -24,24 +24,24 @@ export function WorkflowCreatePage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!goal) { setError('Please describe what you want to accomplish'); return; }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
-      setTimeout(() => navigate('/workflows/wf_001'), 1500);
-    }, 2000);
-  };
 
-  if (success) {
-    return (
-      <Box sx={{ textAlign: 'center', py: 8 }}>
-        <Box sx={{ fontSize: 56, mb: 2 }}>🚀</Box>
-        <Typography variant="h4" fontWeight={700} mb={1}>Workflow Started!</Typography>
-        <Typography variant="body1" color="text.secondary" mb={3}>Your AI agent is now working on your request.</Typography>
-        <Button variant="contained" onClick={() => navigate('/workflows/wf_001')} sx={{ borderRadius: 2, py: 1.5, px: 4 }}>View Progress</Button>
-      </Box>
+    const parameters: Record<string, unknown> = {};
+    if (industry) parameters.industry = industry;
+    if (location) parameters.location = location;
+    if (days) parameters.daysSinceContact = days;
+
+    createMutation.mutate(
+      { goal, parameters: Object.keys(parameters).length > 0 ? parameters : undefined },
+      {
+        onSuccess: (workflow) => {
+          navigate(`/workflows/${workflow.id}`);
+        },
+        onError: () => {
+          setError('Failed to create workflow. Please try again.');
+        },
+      }
     );
-  }
+  };
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto' }}>
@@ -74,7 +74,7 @@ export function WorkflowCreatePage() {
             <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
               <TextField label="What would you like to accomplish?" multiline rows={4} fullWidth required
                 placeholder="e.g., Follow up with healthcare leads in Chennai who haven't been contacted in 2 weeks"
-                value={goal} onChange={(e) => setGoal(e.target.value)} disabled={loading}
+                value={goal} onChange={(e) => setGoal(e.target.value)} disabled={createMutation.isPending}
                 sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
               />
 
@@ -84,7 +84,7 @@ export function WorkflowCreatePage() {
                 <Grid item xs={12} sm={4}>
                   <FormControl fullWidth size="small" sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}>
                     <InputLabel>Industry</InputLabel>
-                    <Select value={industry} label="Industry" onChange={(e) => setIndustry(e.target.value)} disabled={loading}>
+                    <Select value={industry} label="Industry" onChange={(e) => setIndustry(e.target.value)} disabled={createMutation.isPending}>
                       <MenuItem value="">Any</MenuItem>
                       <MenuItem value="Healthcare">Healthcare</MenuItem>
                       <MenuItem value="Technology">Technology</MenuItem>
@@ -96,7 +96,7 @@ export function WorkflowCreatePage() {
                 </Grid>
                 <Grid item xs={12} sm={4}>
                   <TextField fullWidth size="small" label="Location" placeholder="e.g., Chennai" value={location}
-                    onChange={(e) => setLocation(e.target.value)} disabled={loading}
+                    onChange={(e) => setLocation(e.target.value)} disabled={createMutation.isPending}
                     InputProps={{ startAdornment: <LocationOn sx={{ fontSize: 18, color: '#9C9C9C', mr: 0.5 }} /> }}
                     sx={{ '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
                   />
@@ -116,26 +116,30 @@ export function WorkflowCreatePage() {
           </Card>
 
           {/* Templates */}
-          <Typography variant="subtitle2" fontWeight={600} mb={-1}>Or start from a template</Typography>
-          <Grid container spacing={1.5}>
-            {demoTemplates.slice(0, 4).map((t) => (
-              <Grid item xs={6} sm={3} key={t.id}>
-                <Card sx={{ borderRadius: 2, cursor: 'pointer', transition: 'all 0.15s', '&:hover': { borderColor: '#E23744', transform: 'translateY(-1px)' } }}
-                  onClick={() => setGoal(t.description)}>
-                  <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-                    <Typography variant="caption" color="primary" fontWeight={600}>{t.category}</Typography>
-                    <Typography variant="body2" fontWeight={600} mt={0.5}>{t.title}</Typography>
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>{t.steps} steps</Typography>
-                  </CardContent>
-                </Card>
+          {templates.length > 0 && (
+            <>
+              <Typography variant="subtitle2" fontWeight={600} mb={-1}>Or start from a template</Typography>
+              <Grid container spacing={1.5}>
+                {templates.slice(0, 4).map((t) => (
+                  <Grid item xs={6} sm={3} key={t.id}>
+                    <Card sx={{ borderRadius: 2, cursor: 'pointer', transition: 'all 0.15s', '&:hover': { borderColor: '#E23744', transform: 'translateY(-1px)' } }}
+                      onClick={() => setGoal(t.description)}>
+                      <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
+                        <Typography variant="caption" color="primary" fontWeight={600}>{t.category}</Typography>
+                        <Typography variant="body2" fontWeight={600} mt={0.5}>{t.title}</Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>{t.steps} steps</Typography>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
+            </>
+          )}
 
           <Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
-            <Button variant="outlined" onClick={() => navigate('/workflows')} disabled={loading} sx={{ borderRadius: 2, py: 1.5, px: 3 }}>Cancel</Button>
-            <Button type="submit" variant="contained" disabled={loading} sx={{ borderRadius: 2, py: 1.5, px: 4 }} startIcon={loading ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : <Rocket />}>
-              {loading ? 'Starting...' : 'Start Workflow'}
+            <Button variant="outlined" onClick={() => navigate('/workflows')} disabled={createMutation.isPending} sx={{ borderRadius: 2, py: 1.5, px: 3 }}>Cancel</Button>
+            <Button type="submit" variant="contained" disabled={createMutation.isPending} sx={{ borderRadius: 2, py: 1.5, px: 4 }} startIcon={createMutation.isPending ? <CircularProgress size={20} sx={{ color: '#FFF' }} /> : <Rocket />}>
+              {createMutation.isPending ? 'Starting...' : 'Start Workflow'}
             </Button>
           </Box>
         </Box>

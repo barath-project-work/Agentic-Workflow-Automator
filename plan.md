@@ -32,6 +32,7 @@
 | **Frontend** | `cheerful-respect-production-1c45.up.railway.app` | 🟢 Running | 80 |
 | **Auth Service** | `agentic-workflow-automator-production.up.railway.app` | 🟢 UP (DB + Health OK) | 8081 |
 | **Customer Service** | `customer-service-production-0ff7.up.railway.app` | 🟢 UP (DB + Health OK) | 8082 |
+| **Workflow Service** | `workflow-service-production.up.railway.app` | 🟢 UP (Health OK, port 8083) | 8083 |
 | **PostgreSQL** | Shared across all services via `${{ Postgres.DATABASE_URL }}` | 🟢 Healthy | 5432 |
 
 ---
@@ -151,10 +152,11 @@ services/customer-service/src/main/java/com/atlasai/customer/
 
 ### Frontend Nginx Routing
 
-The `nginx.conf` was updated to route different API paths to the correct backend:
+The `nginx.conf` now routes 4 API paths to their correct backends:
 - `/api/auth/*` → auth-service (`agentic-workflow-automator-production.up.railway.app`)
 - `/api/customers/*` → customer-service (`customer-service-production-0ff7.up.railway.app`)
 - `/api/opportunities/*` → customer-service (`customer-service-production-0ff7.up.railway.app`)
+- `/api/workflows/*` → workflow-service (`workflow-service-production.up.railway.app`)
 
 ---
 
@@ -268,6 +270,14 @@ services/workflow-service/src/main/java/com/atlasai/workflow/
 | WorkflowDetailPage | `/workflows/:id` | `GET /api/workflows/{id}` |
 | WorkflowTemplatesPage | `/workflows/templates` | `GET /api/workflows/templates` |
 
+### 🚀 Deployment (Jul 7)
+- Added `workflow-service` to existing Agentic-Workflow-Automator Railway project
+- Fixed Dockerfile: old scaffolded single-stage → multi-stage Maven build (`maven:3.9-eclipse-temurin-21-alpine` → `eclipse-temurin:21-jre-alpine`)
+- Set environment variables: `DATABASE_URL` = `${{ Postgres.DATABASE_URL }}`, `JWT_SECRET` matching auth service
+- Domain: `https://workflow-service-production.up.railway.app` (port 8083)
+- Health check: ✅ HTTP 200 UP
+- Removed `spring-kafka` from pom.xml to prevent Railway startup crash
+
 ---
 
 ## 📋 Phase 4: Task Service (Port 8084) ❌ Not Started
@@ -331,11 +341,13 @@ services/workflow-service/src/main/java/com/atlasai/workflow/
 
 ### Completed
 - [x] Frontend Dockerfile (multi-stage build with Nginx)
-- [x] Frontend nginx.conf (SPA routing + API proxy for 2 backends + caching + security)
+- [x] Frontend nginx.conf (SPA routing + API proxy for 4 backends + caching + security)
 - [x] Auth service Dockerfile (multi-stage Maven build)
 - [x] Customer service Dockerfile (multi-stage Maven build)
+- [x] Workflow service Dockerfile (multi-stage Maven build)
 - [x] Auth service deployed to Railway with PostgreSQL
 - [x] Customer service deployed to Railway with PostgreSQL
+- [x] Workflow service deployed to Railway with PostgreSQL
 
 ### To Build
 - [ ] Add all microservices to `docker-compose.yml`
@@ -353,9 +365,17 @@ services/workflow-service/src/main/java/com/atlasai/workflow/
 - [x] Auth service deployed to Railway (port 8081)
 - [x] Customer service deployed to Railway (port 8082)
 - [x] Frontend deployed to Railway (port 80)
-- [x] Nginx routes auth + customer/opportunity APIs to correct backends
+- [x] Nginx routes auth + customer/opportunity + workflow APIs to correct backends
 
-### Incidents & Resolutions
+### 🚀 Deployment Incidents (Jul 7 — Workflow Service)
+
+| Issue | Root Cause | Resolution | Date |
+|-------|-----------|------------|------|
+| Build failed: no JAR found | Dockerfile was single-stage (expected pre-built JAR) | Rewrote to multi-stage Maven build (maven:3.9 → JRE) | Jul 7 |
+| Domain returned 502 | Domain created without target port | Removed domain, recreated with `--port 8083` | Jul 7 |
+| Potential HEALTHCHECK failure | `wget` not available in Alpine | Added `RUN apk add --no-cache wget` to Dockerfile | Jul 7 |
+
+### Previous Incidents & Resolutions
 
 | Issue | Root Cause | Resolution | Date |
 |-------|-----------|------------|------|
