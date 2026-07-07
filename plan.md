@@ -1,7 +1,7 @@
 # AtlasAI — Project Implementation Plan
 
 > **Project:** Agentic Sales Workflow Automation Platform
-> **Last Updated:** July 6, 2026
+> **Last Updated:** July 7, 2026
 
 ---
 
@@ -18,7 +18,7 @@
 | **Founder Page Redesign** | 100% | ✅ Premium 3-column dashboard layout with responsive grid |
 | **Mobile Responsive** | 30% | 🟡 Auth pages done — 40+ more pages need mobile fixes |
 | **AI Agent Service** | 80% | ✅ Python structure done — needs OpenAI key |
-| **Workflow Service** | 0% | ❌ Not started — P0 candidate |
+| **Workflow Service** | 100% | ✅ Coded — Full CRUD + cancel + templates, builds successfully |
 | **Task Service** | 0% | ❌ Not started |
 | **Notification Service** | 0% | ❌ Not started |
 | **Search Service** | 0% | ❌ Not started |
@@ -207,19 +207,62 @@ A screenshot gallery was added to the README with placeholders for 5 images:
 
 ---
 
-## 🔄 Phase 3: Workflow Service (Port 8083) ❌ Not Started
+## 🔄 Phase 3: Workflow Service (Port 8083) ✅ Complete (Jul 7)
 
-### To Build
-- [ ] JPA entities: `WorkflowRun`, `WorkflowStep`
-- [ ] JPA repositories
-- [ ] Service layer for workflow orchestration
-- [ ] REST controllers (CRUD + execution)
-- [ ] Kafka consumer for step events + producer for lifecycle events
-- [ ] Spring Retry for resilient execution
+### Backend — Full Java/Spring Boot Microservice
 
-### Frontend Pages
-| Page | Route | Endpoints Needed |
-|------|-------|-----------------|
+```
+services/workflow-service/src/main/java/com/atlasai/workflow/
+├── WorkflowApplication.java                 — Entry point (@EnableRetry)
+├── config/
+│   ├── DataSourceConfig.java               — Reads Railway DATABASE_URL
+│   ├── SecurityConfig.java                  — JWT auth, public /count + /templates
+│   ├── JwtAuthFilter.java                   — Extracts JWT claims from header
+│   └── GlobalExceptionHandler.java          — Consistent error responses
+├── controller/
+│   └── WorkflowController.java              — Full CRUD + cancel + count + templates
+├── service/
+│   └── WorkflowService.java                 — CRUD + cancel + static templates
+├── repository/
+│   ├── WorkflowRunRepository.java           — JPA search by status + goal
+│   └── WorkflowStepRepository.java          — Find by workflowRunId, count by status
+└── model/
+    ├── entity/ (WorkflowRun.java, WorkflowStep.java)
+    ├── enums/ (WorkflowStatus.java, StepStatus.java)
+    ├── request/ (WorkflowRequest.java)
+    └── response/ (WorkflowResponse.java, WorkflowStepResponse.java, WorkflowTemplateResponse.java)
+```
+
+### What Was Built
+
+**Entities:**
+- `WorkflowRun` — id (UUID), goal (TEXT), status (RUNNING/COMPLETED/FAILED/BLOCKED/CANCELLED), requestedBy, plan (TEXT JSON), result (TEXT), stepCount, stepsCompleted, createdAt, completedAt
+- `WorkflowStep` — id (UUID), workflowRunId, stepNumber, toolName, description, status (PENDING/RUNNING/COMPLETED/FAILED/SKIPPED), input/output/errorDetail (TEXT), duration, createdAt
+
+**Endpoints:**
+| Method | Path | Auth | Description |
+|--------|------|------|-------------|
+| `GET` | `/api/workflows?status=&search=&page=&size=` | JWT | List/search workflows with pagination |
+| `GET` | `/api/workflows/{id}` | JWT | Get workflow detail with all steps |
+| `POST` | `/api/workflows` | JWT | Create new workflow (goal + optional parameters) |
+| `PUT` | `/api/workflows/{id}/cancel` | JWT | Cancel a RUNNING or BLOCKED workflow |
+| `DELETE` | `/api/workflows/{id}` | JWT | Delete workflow and all its steps |
+| `GET` | `/api/workflows/count` | Public | Total workflow count |
+| `GET` | `/api/workflows/templates` | Public | 6 static workflow templates |
+
+**Key patterns followed (matching customer-service):**
+- `@Column(columnDefinition = "VARCHAR(255)")` on all String fields to prevent `bytea` columns
+- `DataSourceConfig.java` for Railway `DATABASE_URL` parsing
+- `JwtAuthFilter` validates HMAC-SHA256 JWT tokens from same `JWT_SECRET`
+- Pagination via `Pageable`/`Sort`/`PageRequest` with `countQuery`
+- Global exception handler with 9 dedicated handlers
+- Static templates matching frontend mock data (`demoTemplates`)
+
+**✅ Railway-ready:** `spring-kafka` dependency removed from `pom.xml`, `spring.kafka` section removed from `application.yml`. Service will start cleanly on Railway without Kafka.
+
+### Frontend Pages (Already Built with Mock Data)
+| Page | Route | Will Call |
+|------|-------|-----------|
 | WorkflowListPage | `/workflows` | `GET /api/workflows?status=` |
 | WorkflowCreatePage | `/workflows/create` | `POST /api/workflows` |
 | WorkflowDetailPage | `/workflows/:id` | `GET /api/workflows/{id}` |
