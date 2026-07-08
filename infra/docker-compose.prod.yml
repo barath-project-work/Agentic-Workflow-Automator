@@ -1,0 +1,184 @@
+# ═══════════════════════════════════════════════════════════════════
+# AtlasAI — Production Docker Compose (Oracle Cloud / Any VPS)
+# Runs all 5 microservices + PostgreSQL + Nginx with SSL on a
+# single server. Designed for Oracle Cloud Free Tier (2 CPU, 12GB RAM).
+#
+# Usage: docker compose -f infra/docker-compose.prod.yml up -d
+# ═══════════════════════════════════════════════════════════════════
+
+version: "3.8"
+
+services:
+  # ─── PostgreSQL ──────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: atlasai-db
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DB_USER:-atlasai}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-atlasai_secret}
+      POSTGRES_DB: ${DB_NAME:-atlasai}
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -q"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Auth Service (Port 8081) ────────────────
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    container_name: atlasai-auth
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-atlasai}:${DB_PASSWORD:-atlasai_secret}@postgres:5432/${DB_NAME:-atlasai}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      SERVER_PORT: "8081"
+      _JAVA_OPTIONS: -Xmx128m
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ─── Customer Service (Port 8082) ────────────
+  customer-service:
+    build:
+      context: ./services/customer-service
+      dockerfile: Dockerfile
+    container_name: atlasai-customer
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-atlasai}:${DB_PASSWORD:-atlasai_secret}@postgres:5432/${DB_NAME:-atlasai}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      SERVER_PORT: "8082"
+      _JAVA_OPTIONS: -Xmx128m
+    ports:
+      - "8082:8082"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ─── Workflow Service (Port 8083) ────────────
+  workflow-service:
+    build:
+      context: ./services/workflow-service
+      dockerfile: Dockerfile
+    container_name: atlasai-workflow
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-atlasai}:${DB_PASSWORD:-atlasai_secret}@postgres:5432/${DB_NAME:-atlasai}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      SERVER_PORT: "8083"
+      _JAVA_OPTIONS: -Xmx128m
+    ports:
+      - "8083:8083"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8083/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ─── Task Service (Port 8084) ────────────────
+  task-service:
+    build:
+      context: ./services/task-service
+      dockerfile: Dockerfile
+    container_name: atlasai-task
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-atlasai}:${DB_PASSWORD:-atlasai_secret}@postgres:5432/${DB_NAME:-atlasai}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
+      SERVER_PORT: "8084"
+      _JAVA_OPTIONS: -Xmx128m
+    ports:
+      - "8084:8084"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8084/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  # ─── Frontend (Port 80) ──────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: atlasai-frontend
+    restart: unless-stopped
+    depends_on:
+      auth-service:
+        condition: service_healthy
+    environment:
+      # Internal Docker network URLs (no SSL — all internal HTTP)
+      AUTH_SERVICE_URL: http://auth-service:8081
+      CUSTOMER_SERVICE_URL: http://customer-service:8082
+      WORKFLOW_SERVICE_URL: http://workflow-service:8083
+      TASK_SERVICE_URL: http://task-service:8084
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ─── Nginx Reverse Proxy (SSL termination) ──
+  # Uncomment and configure with your domain for HTTPS
+  # nginx-proxy:
+  #   image: nginx:stable-alpine
+  #   container_name: atlasai-proxy
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./infra/nginx-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+  #     - ./infra/ssl:/etc/nginx/ssl:ro
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   depends_on:
+  #     - frontend
+
+volumes:
+  postgres_data:
+    driver: local
