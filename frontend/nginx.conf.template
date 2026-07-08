@@ -1,5 +1,6 @@
-# AtlasAI Frontend — Nginx Production Config
-# Serves the built Vite SPA and proxies API calls to backend microservices
+# AtlasAI Frontend — Nginx Config Template
+# Backend URLs are injected at container boot via docker-entrypoint.sh
+# Uses envsubst variable syntax: ${VARIABLE}
 
 server {
     listen 80;
@@ -32,18 +33,16 @@ server {
     add_header X-XSS-Protection "1; mode=block" always;
     add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 
-    # ─── API proxy — Auth Service (/api/auth/*) ──
-    # ⚠️ UPDATE THESE DOMAINS after deploying to Render:
-    # Replace 'auth-service.onrender.com' with the actual Render URL
+    # ─── API proxy — Auth Service ──
     location /api/auth {
-        proxy_pass https://auth-service.onrender.com;
+        proxy_pass ${AUTH_SERVICE_URL};
         proxy_ssl_verify off;
         proxy_ssl_server_name on;
         proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host auth-service.onrender.com;
+        proxy_set_header Host ${AUTH_SERVICE_HOST};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -53,16 +52,16 @@ server {
         proxy_read_timeout    10s;
     }
 
-    # ─── API proxy — Customer Service (/api/customers/*) ──
+    # ─── API proxy — Customer Service ──
     location /api/customers {
-        proxy_pass https://customer-service.onrender.com;
+        proxy_pass ${CUSTOMER_SERVICE_URL};
         proxy_ssl_verify off;
         proxy_ssl_server_name on;
         proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host customer-service.onrender.com;
+        proxy_set_header Host ${CUSTOMER_SERVICE_HOST};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -74,14 +73,14 @@ server {
 
     # ─── API proxy — Customer Service (/api/opportunities/*) ──
     location /api/opportunities {
-        proxy_pass https://customer-service.onrender.com;
+        proxy_pass ${CUSTOMER_SERVICE_URL};
         proxy_ssl_verify off;
         proxy_ssl_server_name on;
         proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host customer-service.onrender.com;
+        proxy_set_header Host ${CUSTOMER_SERVICE_HOST};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -91,16 +90,16 @@ server {
         proxy_read_timeout    10s;
     }
 
-    # ─── API proxy — Workflow Service (/api/workflows/*) ──
+    # ─── API proxy — Workflow Service ──
     location /api/workflows {
-        proxy_pass https://workflow-service.onrender.com;
+        proxy_pass ${WORKFLOW_SERVICE_URL};
         proxy_ssl_verify off;
         proxy_ssl_server_name on;
         proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host workflow-service.onrender.com;
+        proxy_set_header Host ${WORKFLOW_SERVICE_HOST};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -110,16 +109,16 @@ server {
         proxy_read_timeout    10s;
     }
 
-    # ─── API proxy — Task Service (/api/tasks/*) ──
+    # ─── API proxy — Task Service ──
     location /api/tasks {
-        proxy_pass https://task-service.onrender.com;
+        proxy_pass ${TASK_SERVICE_URL};
         proxy_ssl_verify off;
         proxy_ssl_server_name on;
         proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
-        proxy_set_header Host task-service.onrender.com;
+        proxy_set_header Host ${TASK_SERVICE_HOST};
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;

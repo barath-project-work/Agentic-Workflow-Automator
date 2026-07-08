@@ -1,14 +1,31 @@
-import { Box, Typography, Card, CardContent, Chip, Button, Grid, Divider } from '@mui/material';
+import { Box, Typography, Card, CardContent, Chip, Button, Grid, Divider, CircularProgress, Alert } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowBack, CheckCircle } from '@mui/icons-material';
-import { demoTasks } from '../../services/mockData';
+import { useTask } from '../../hooks/useTasks';
+
+const typeColors: Record<string, string> = { EMAIL: '#4A90D9', MEETING: '#F7A83E', CALL: '#1BA672', FOLLOW_UP: '#9B59B6', REVIEW: '#E67E22' };
 
 export function TaskDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const task = demoTasks.find(t => t.id === id) || demoTasks[0];
+  const { data: task, isLoading, error } = useTask(id || '');
 
-  const typeColors: Record<string, string> = { EMAIL: '#4A90D9', MEETING: '#F7A83E', CALL: '#1BA672', FOLLOW_UP: '#9B59B6', REVIEW: '#E67E22' };
+  if (isLoading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error || !task) {
+    return (
+      <Box>
+        <Button startIcon={<ArrowBack />} onClick={() => navigate('/tasks')} sx={{ mb: 2, color: '#696969' }}>Back to Tasks</Button>
+        <Alert severity="error" sx={{ borderRadius: 2 }}>Task not found or failed to load.</Alert>
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ maxWidth: 700, mx: 'auto' }}>
@@ -29,7 +46,7 @@ export function TaskDetailPage() {
           <Grid container spacing={2}>
             <Grid item xs={6}>
               <Typography variant="caption" color="text.secondary">Due Date</Typography>
-              <Typography variant="body2" fontWeight={500}>{new Date(task.dueDate).toLocaleDateString()}</Typography>
+              <Typography variant="body2" fontWeight={500}>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'N/A'}</Typography>
             </Grid>
             <Grid item xs={6}>
               <Typography variant="caption" color="text.secondary">Type</Typography>
