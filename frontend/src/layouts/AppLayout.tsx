@@ -39,7 +39,6 @@ import {
   BarChart,
 } from '@mui/icons-material';
 import { useAuthStore } from '../stores/authStore';
-import { useUIStore } from '../stores/uiStore';
 import { demoNotifications } from '../services/mockData';
 
 const DRAWER_WIDTH = 260;
@@ -110,7 +109,6 @@ export function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuthStore();
-  const { demoMode, setDemoMode } = useUIStore();
   const unreadNotifs = demoNotifications.filter(n => !n.read);
 
   const allNavItems = getFlatNavItems();
@@ -152,46 +150,6 @@ export function AppLayout() {
           <Typography variant="h6" noWrap sx={{ flexGrow: 1, ml: 1, fontWeight: 700, letterSpacing: '-0.02em', color: '#1C1C1C' }}>
             {allNavItems.find(i => isActive(i.path))?.label || 'Dashboard'}
           </Typography>
-
-          {/* Demo mode toggle */}
-          <Box
-            onClick={() => setDemoMode(!demoMode)}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 0.75,
-              px: 1.5,
-              py: 0.5,
-              mr: 1,
-              borderRadius: 2,
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-              fontSize: '0.6875rem',
-              fontWeight: 600,
-              fontFamily: 'Inter, sans-serif',
-              letterSpacing: '0.02em',
-              textTransform: 'uppercase',
-              bgcolor: demoMode ? '#FFF5F5' : '#E8F5E9',
-              color: demoMode ? '#E23744' : '#1BA672',
-              border: 1,
-              borderColor: demoMode ? '#E2374420' : '#1BA67220',
-              '&:hover': {
-                bgcolor: demoMode ? '#FFEAEA' : '#D0F0D8',
-              },
-            }}
-            title={demoMode ? 'Click to switch to Live mode' : 'Click to switch to Demo mode'}
-          >
-            <Box
-              sx={{
-                width: 7,
-                height: 7,
-                borderRadius: '50%',
-                bgcolor: demoMode ? '#E23744' : '#1BA672',
-                flexShrink: 0,
-              }}
-            />
-            {demoMode ? 'Demo' : 'Live'}
-          </Box>
 
           <IconButton sx={{ mr: 1 }} onClick={(e) => setNotifAnchor(e.currentTarget)}>
             <Badge badgeContent={unreadNotifs.length} color="error">

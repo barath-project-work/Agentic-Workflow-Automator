@@ -7,12 +7,9 @@ import {
   Button,
   Alert,
   CircularProgress,
-  Divider,
 } from '@mui/material';
-import { Email as EmailIcon, Lock as LockIcon, Person as PersonIcon, Build as BuildIcon } from '@mui/icons-material';
+import { Email as EmailIcon, Lock as LockIcon, Person as PersonIcon } from '@mui/icons-material';
 import { useAuthStore } from '../../stores/authStore';
-import { useUIStore } from '../../stores/uiStore';
-import { demoUser } from '../../services/mockData';
 import api from '../../services/api';
 
 interface AuthResponse {
@@ -36,10 +33,8 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [demoLoading, setDemoLoading] = useState(false);
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
-  const setDemoMode = useUIStore((state) => state.setDemoMode);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -208,56 +203,8 @@ export function LoginPage() {
         </Button>
       </Box>
 
-      {/* Divider with Quick Demo Access */}
-      <Box sx={{ my: { xs: 2, sm: 2.5 } }}>
-        <Divider sx={{ mb: { xs: 2, sm: 2.5 } }}>
-          <Typography variant="caption" sx={{ color: '#B0B0B0', px: 1.5, fontWeight: 500, fontFamily: 'Inter, sans-serif' }}>
-            or
-          </Typography>
-        </Divider>
-        <Button
-          variant="outlined"
-          fullWidth
-          size="large"
-          disabled={demoLoading}
-          startIcon={demoLoading ? <CircularProgress size={18} /> : <BuildIcon />}
-          onClick={() => {
-            setDemoLoading(true);
-            setDemoMode(true);
-            // Small delay to simulate transition
-            setTimeout(() => {
-              login('demo_token', 'demo_refresh', {
-                id: demoUser.id,
-                email: demoUser.email,
-                name: demoUser.name,
-                role: demoUser.role,
-              });
-              setDemoLoading(false);
-              navigate('/dashboard');
-            }, 400);
-          }}
-          sx={{
-            py: { xs: 1.4, sm: 1.4 },
-            borderRadius: 2,
-            fontSize: { xs: '0.875rem', sm: '0.9375rem' },
-            fontWeight: 600,
-            fontFamily: 'Inter, sans-serif',
-            borderColor: '#E8E8E8',
-            color: '#1C1C1C',
-            bgcolor: '#FAFAFA',
-            '&:hover': {
-              bgcolor: '#FFF5F5',
-              borderColor: '#E2374440',
-              color: '#E23744',
-            },
-          }}
-        >
-          Quick Demo Access
-        </Button>
-      </Box>
-
       {/* Mode switch */}
-      <Box sx={{ textAlign: 'center', mt: { xs: 1, sm: 1 } }}>
+      <Box sx={{ textAlign: 'center', mt: { xs: 2.5, sm: 3 } }}>
         <Typography sx={{ fontSize: { xs: '0.8125rem', sm: '0.875rem' }, color: '#696969', fontFamily: 'Inter, sans-serif' }}>
           {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
           <Typography
