@@ -28,9 +28,9 @@ COPY --from=build /app/target/customer-service-*.jar app.jar
 # Expose customer service port
 EXPOSE 8082
 
-# Health check
+# Health check (uses PORT env var with fallback to 8082)
 HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
-    CMD wget --quiet --tries=1 --spider http://localhost:8082/actuator/health || exit 1
+    CMD wget --quiet --tries=1 --spider http://localhost:${PORT:-8082}/actuator/health || exit 1
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "/app/app.jar"]
