@@ -1,8 +1,38 @@
 import axios from 'axios';
 import { useAuthStore } from '../stores/authStore';
 
+// Backend service URLs
+const AUTH_SERVICE_URL = 'https://agentic-workflow-automator-production.up.railway.app';
+const CUSTOMER_SERVICE_URL = 'https://customer-service-production-0ff7.up.railway.app';
+const WORKFLOW_SERVICE_URL = 'https://workflow-service-production.up.railway.app';
+
+/**
+ * Routes a request path to the correct backend service base URL.
+ * Backend endpoints start with /api/* (e.g. /api/auth/login, /api/customers)
+ *
+ * Path routing:
+ * - /auth/* or /api/auth/* → Auth Service
+ * - /customers/*, /opportunities/*, /api/customers/*, /api/opportunities/* → Customer Service
+ * - /workflows/*, /tasks/*, /api/workflows/*, /api/tasks/* → Workflow Service
+ */
+function getBaseUrl(path: string): string {
+  const apiPath = path.startsWith('/api') ? path.substring(4) : path;
+  if (apiPath.startsWith('/auth')) return AUTH_SERVICE_URL;
+  if (apiPath.startsWith('/customers') || apiPath.startsWith('/opportunities')) return CUSTOMER_SERVICE_URL;
+  if (apiPath.startsWith('/workflows') || apiPath.startsWith('/tasks')) return WORKFLOW_SERVICE_URL;
+  return AUTH_SERVICE_URL; // fallback
+}
+
+/**
+ * Ensures the path has the /api prefix that all backend endpoints expect.
+ * Service files call e.g. api.get('/customers'), this converts to /api/customers.
+ */
+function ensureApiPrefix(path: string): string {
+  if (path.startsWith('/api')) return path;
+  return '/api' + path;
+}
+
 const api = axios.create({
-  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -26,14 +56,23 @@ function processQueue(error: unknown, token: string | null = null) {
   failedQueue = [];
 }
 
-// Request interceptor — attach JWT token (skip for public auth endpoints)
+// Request interceptor — set backend URL dynamically + attach JWT token
 api.interceptors.request.use((config) => {
-  // Don't attach token for register, login, or refresh — those are public endpoints
-  if (config.url?.includes('/auth/register') ||
-      config.url?.includes('/auth/login') ||
-      config.url?.includes('/auth/refresh')) {
+  const path = config.url || '';
+
+  // Normalize the path with /api prefix
+  config.url = ensureApiPrefix(path);
+
+  // Set the baseURL to the correct backend service
+  config.baseURL = getBaseUrl(path);
+
+  // Don't attach token for public auth endpoints
+  if (path.includes('/auth/register') ||
+      path.includes('/auth/login') ||
+      path.includes('/auth/refresh')) {
     return config;
   }
+
   const token = localStorage.getItem('atlasai_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -79,7 +118,7 @@ api.interceptors.response.use(
     }
 
     try {
-      const response = await axios.post('/api/auth/refresh', {
+      const response = await axios.post(`${AUTH_SERVICE_URL}/api/auth/refresh`, {
         refreshToken,
       });
 
