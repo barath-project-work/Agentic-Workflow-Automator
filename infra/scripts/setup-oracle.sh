@@ -4,7 +4,7 @@
 # Run this ONCE on a fresh Oracle Cloud Free Tier instance.
 # Installs Docker, Docker Compose, and clones the project.
 #
-# Usage: chmod +x scripts/setup-oracle.sh && ./scripts/setup-oracle.sh
+# Usage: chmod +x infra/scripts/setup-oracle.sh && ./infra/scripts/setup-oracle.sh
 # ═══════════════════════════════════════════════════════════════════
 
 set -e

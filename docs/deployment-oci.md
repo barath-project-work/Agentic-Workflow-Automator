@@ -77,8 +77,8 @@ git clone https://github.com/barath-project-work/Agentic-Workflow-Automator.git
 cd Agentic-Workflow-Automator
 
 # Make the script executable and run it
-chmod +x scripts/setup-oracle.sh
-./scripts/setup-oracle.sh
+chmod +x infra/scripts/setup-oracle.sh
+./infra/scripts/setup-oracle.sh
 ```
 
 ## Step 5: Configure and Start
